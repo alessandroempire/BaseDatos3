@@ -1,0 +1,6 @@
+ssh carnet@tau.ldc.usb.ve
+ssh carnet@xavier.usb.ve
+ssh carnet@esmar.usb.ve
+
+rlwrap sqlplus CI531304 
+pass: CI531304
