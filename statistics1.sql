@@ -1,6 +1,6 @@
 define FILE=statistic1sSpool.sql
 spool &file
-set lines 356
+set lines 250
 set trimout on
 set space 1 
 set tab off
