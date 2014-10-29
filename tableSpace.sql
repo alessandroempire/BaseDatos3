@@ -13,9 +13,10 @@ PCTFREE 0
 create tablespace "CAT2"
 datafile 'tablespace/rosetta/rosetta/cat2.dbf' size 1245 MB
 --AUTOEXTEND OFF
+--PCTUSED
 --PCTFREE 
 --BLOCKSIZE
---EXTENT_MANAGEMENT_CLAUSE 
+--EXTENT_MANAGEMENT_CLAUSE LOCAL 
 --SEGMENT_MANAGMENT_CLAUSE
 
 spool off; 
