@@ -7,7 +7,7 @@ set space 1
 set tab off
 
 select segment_name,
-       bytes,
+       bytes/1024/1024 "MB",
        blocks
 from dba_segments
 where owner='CI5313' and tablespace_name='TBS3' and
@@ -15,7 +15,7 @@ where owner='CI5313' and tablespace_name='TBS3' and
 
 ------------------------------------------------------      
 select segment_name,
-       bytes,
+       bytes/1024/1024 "MB",
        blocks
 from dba_segments
 where owner='CI5313' and tablespace_name='TBS3' and
@@ -23,7 +23,7 @@ where owner='CI5313' and tablespace_name='TBS3' and
 
 -------------------------------------------------------------
 select segment_name,
-       bytes,
+       bytes/1024/1024 "MB",
        blocks
 from dba_segments
 where owner='CI5313' and tablespace_name='TBS3' and
@@ -31,7 +31,7 @@ where owner='CI5313' and tablespace_name='TBS3' and
 
 -----------------------------------------------------------
 select segment_name,
-       bytes,
+       bytes/1024/1024 "MB",
        blocks
 from dba_segments
 where owner='CI5313' and tablespace_name='TBS3' and
@@ -39,7 +39,7 @@ where owner='CI5313' and tablespace_name='TBS3' and
       
 ---------------------------------------------------------------
 select segment_name,
-       bytes,
+       bytes/1024/1024 "MB",
        blocks
 from dba_segments
 where owner='CI5313' and tablespace_name='TBS3' and
@@ -47,7 +47,7 @@ where owner='CI5313' and tablespace_name='TBS3' and
 
 -----------------------------------------------------------      
 select segment_name,
-       bytes,
+       bytes/1024/1024 "MB",
        blocks
 from dba_segments
 where owner='CI5313' and tablespace_name='TBS3' and
@@ -56,7 +56,7 @@ where owner='CI5313' and tablespace_name='TBS3' and
 -----------------------------------------------------------
 
 select segment_name,
-       bytes,
+       bytes/1024/1024 "MB",
        blocks
 from dba_segments
 where owner='CI5313' and tablespace_name='TBS3' and
@@ -64,10 +64,10 @@ where owner='CI5313' and tablespace_name='TBS3' and
 
 ------------------------------------------------------------
 select segment_name,
-       bytes,
+       bytes/1024/1024 "MB",
        blocks
 from dba_segments
 where owner='CI5313' and tablespace_name='TBS3' and
       segment_name='PART';
-      
+     
 spool off;
