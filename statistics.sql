@@ -26,7 +26,7 @@ from   all_tab_columns
 where  table_name='REGION' and owner='CI5313';
 
 -----------------------------------------------------------------
-
+--Stats de LINEITEM
 execute DBMS_STATS.GATHER_TABLE_STATS('ci5313', 'LINEITEM')
 
 select column_name "column name", num_distinct "num distinct",
@@ -35,7 +35,7 @@ from   all_tab_columns
 where  table_name='LINEITEM' and owner='CI5313';
 
 -----------------------------------------------------------------
-
+--Stats de ORDERS
 execute DBMS_STATS.GATHER_TABLE_STATS('ci5313', 'ORDERS')
 
 select column_name "column name", num_distinct "num distinct",
@@ -44,7 +44,7 @@ from   all_tab_columns
 where  table_name='ORDERS' and owner='CI5313';
 
 -----------------------------------------------------------------
-
+--Stats de PARTSUPPLIER
 execute DBMS_STATS.GATHER_TABLE_STATS('ci5313', 'PARTSUPPLIER')
 
 select column_name "column name", num_distinct "num distinct",
@@ -53,7 +53,7 @@ from   all_tab_columns
 where  table_name='PARTSUPPLIER' and owner='CI5313';
 
 ------------------------------------------------------------------
-
+--Stats de CUSTOMER
 execute DBMS_STATS.GATHER_TABLE_STATS('ci5313', 'CUSTOMER')
 
 select column_name "column name", num_distinct "num distinct",
@@ -61,7 +61,7 @@ select column_name "column name", num_distinct "num distinct",
 from   all_tab_columns
 where  table_name='CUSTOMER' and owner='CI5313';
 -----------------------------------------------------------------
-
+--Stats de SUPPLIER
 execute DBMS_STATS.GATHER_TABLE_STATS('ci5313', 'SUPPLIER')
 
 select column_name "column name", num_distinct "num distinct",
@@ -70,7 +70,7 @@ from   all_tab_columns
 where  table_name='SUPPLIER' and owner='CI5313';
 
 -----------------------------------------------------------------
-
+--Stats de PART
 execute DBMS_STATS.GATHER_TABLE_STATS('ci5313', 'PART')
 
 select column_name "column name", num_distinct "num distinct",

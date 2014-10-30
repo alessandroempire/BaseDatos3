@@ -10,7 +10,7 @@ set tab off
 SELECT table_name "name",blocks "blocks", num_rows "Tuplas",
        round((num_rows*avg_row_len)/(1024)) KB
 FROM   all_tables
-WHERE  table_name='NATION' and owner='CI5313' and num_rows > 0;
+WHERE  table_name='NATION' and owner='CI5313';
 
 -----------------------------------------------------------------
 --Stats de REGION
