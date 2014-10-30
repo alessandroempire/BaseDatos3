@@ -6,7 +6,7 @@ create tablespace "CAT1"
 datafile 'tablespace/rosetta/rosetta/cat1.dbf' SIZE 4 KB
 AUTOEXTEND OFF
 LOGGING ONLINE PERMANENT
-EXTENT MANAGEMENT LOCAL SIZE 128 K
+EXTENT MANAGEMENT LOCAL UNIFORM SIZE 128 K 
 SEGMENT SPACE MANAGEMENT MANUAL;
 
 --la suma de todas las tablas (menos nations y regions es 1079 MB)
