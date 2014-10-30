@@ -19,6 +19,6 @@ select count(*) from (select * from CI5313.part where P_SIZE = '6');
 --- (3964/200000)*100=1.9% de tuplas filtradas
 
 select count(*) from (select * from CI5313.part where P_TYPE like 'PROMO PLATED STEEL');  
---- (1354/200000)*100=0.677
+--(1266/200000)*100=0.633
 
 spool off;

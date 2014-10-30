@@ -1,6 +1,6 @@
 define FILE=histogramSpool.sql
 spool &file
-set lines 200
+set lines 50
 set trimout on
 set space 1 
 set tab off

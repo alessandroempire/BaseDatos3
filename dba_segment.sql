@@ -1,7 +1,7 @@
 define FILE=dba_segmentSpool.sql
 spool &FILE
 
-set line 256
+set line 50
 set trimout on
 set space 1
 set tab off
