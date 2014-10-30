@@ -3,6 +3,14 @@ spool &FILE
 
 ----------------------------------------------
 --tabla REGION
+/*
+BEGIN
+     DBMS_STATS.GATHER_TABLE_STATS('ci5313' , 'REGION');
+END;
+*/
+
+--analyze table ci5313.REGION estimate statistics;
+
 set autotrace traceonly statistics;
 
 select *
@@ -80,5 +88,6 @@ from ci5313.LINEITEM;
 
 set autotrace off
 
----------------------------------------------
+
 spool off;
+

@@ -3,13 +3,15 @@
 --------------------------------------------------------------------------------------------------
 --Q1: Valor de los productos enviados de un país a otro 
 
+
+select count(*) from (
 select supp_nation, cust_nation, l_year, sum(volume) as revenue
 from (select
 n1.n_name as supp_nation,
 n2.n_name as cust_nation,
 extract(year from l_shipdate) as l_year,
 l_extendedprice * (1 - l_discount) as volume
-from supplier, lineitem, orders, customer, nation n1, nation n2
+from CI5313.supplier, CI5313.lineitem, CI5313.orders, CI5313.customer, CI5313.nation n1, CI5313.nation n2
 where s_suppkey = l_suppkey
 and o_orderkey = l_orderkey
 and c_custkey = o_custkey
@@ -23,15 +25,16 @@ cust_nation,
 l_year
 order by supp_nation,
 cust_nation,
-l_year;
+l_year);
 
 --------------------------------------------------------------------------------------------------
 --Q2: Prioridad de envío 
 
+select count(*) from (
 select L_ORDERKEY, sum(L_EXTENDEDPRICE*(1-L_DISCOUNT)) as REVENUE,
 O_ORDERDATE,
 O_SHIPPRIORITY
-from CUSTOMER, ORDERS, LINEITEM
+from CI5313.CUSTOMER, CI5313.ORDERS, CI5313.LINEITEM
 where C_MKTSEGMENT = '&segment'
 and C_CUSTKEY = O_CUSTKEY
 and L_ORDERKEY = O_ORDERKEY
@@ -40,42 +43,45 @@ and L_SHIPDATE > '&date'
 group by
 L_ORDERKEY, O_ORDERDATE, O_SHIPPRIORITY
 order by
-REVENUE desc, O_ORDERDATE;
+REVENUE desc, O_ORDERDATE);
 
 --------------------------------------------------------------------------------------------------
 --Q3: Relación entre libros y fabricantes 
 
+select count(*) from (
 select P_BRAND, P_TYPE, count(distinct PS_SUPPKEY) as SUPPLIER_CNT
-from PARTSUPPLIER, PART
+from CI5313.PARTSUPPLIER, CI5313.PART
 where P_PARTKEY = PS_PARTKEY and
 P_BRAND = '&brand' and
 P_TYPE like '&type' and
-PS_SUPPKEY not in (select S_SUPPKEY from SUPPLIER
+PS_SUPPKEY not in (select S_SUPPKEY from CI5313.SUPPLIER
 where S_COMMENT like '%Customer%Complaints')
 group by
 P_BRAND, P_TYPE
 order by
-SUPPLIER_CNT desc, P_BRAND, P_TYPE;
+SUPPLIER_CNT desc, P_BRAND, P_TYPE);
 
 --------------------------------------------------------------------------------------------------
 --Q4: Distribución de clientes 
 
+select count(*) from (
 select C_COUNT, count(*) as CUSTDIST
 from (select C_CUSTKEY, count(O_ORDERKEY) as C_COUNT
-from CUSTOMER left outer join ORDERS on
+from CI5313.CUSTOMER left outer join CI5313.ORDERS on
 C_CUSTKEY=O_CUSTKEY
 group by C_CUSTKEY)
 C_ORDERS
 group by
 C_COUNT
 order by
-CUSTDIST desc, C_COUNT desc;
+CUSTDIST desc, C_COUNT desc);
 
 --------------------------------------------------------------------------------------------------
 --Q5: Proveedor con el menor precio 
 
+select count(*) from (
 select PS_SUPPKEY, S_NAME, S_NATIONKEY, S_PHONE, PS_SUPPCOST
-from PARTSUPPLIER E, SUPPLIER, NATION, REGION, PART
+from CI5313.PARTSUPPLIER E, CI5313.SUPPLIER, CI5313.NATION, CI5313.REGION, CI5313.PART
 where PS_PARTKEY=P_PARTKEY and
 P_SIZE = &psize and
 P_TYPE like '%&ptype' and
@@ -85,7 +91,7 @@ S_NATIONKEY = N_NATIONKEY and
 N_REGIONKEY=R_REGIONKEY and
 PS_SUPPCOST=
 (SELECT min( PS_SUPPCOST)
-from PARTSUPPLIER I
-where E.PS_PARTKEY=I.PS_PARTKEY);
+from CI5313.PARTSUPPLIER I
+where E.PS_PARTKEY=I.PS_PARTKEY));
 
 --------------------------------------------------------------------------------------------------

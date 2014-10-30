@@ -1,16 +1,17 @@
 define FILE=statistic1sSpool.sql
 spool &file
-set lines 250
+set lines 356
 set trimout on
 set space 1 
 set tab off
 
 --------------------------------------------------------------
 --Stats de NATION
-SELECT table_name "name",blocks "blocks", num_rows "Tuplas"
+SELECT table_name "name",blocks "blocks", num_rows "Tuplas",
+       round((num_rows*avg_row_len)/(1024*1024)) MB
 FROM   all_tables
-WHERE  table_name='NATION' and owner='CI5313';
-
+WHERE  table_name='NATION' and owner='CI5313' and num_rows > 0;
+/*
 -----------------------------------------------------------------
 --Stats de REGION
 SELECT table_name "name", blocks "blocks", num_rows "Tuplas"
@@ -52,6 +53,6 @@ WHERE  table_name='SUPPLIER' and owner='CI5313';
 SELECT table_name "name", blocks "blocks", num_rows "Tuplas"
 FROM   all_tables
 WHERE  table_name='PART' and owner='CI5313';
-
+*/
 -----------------------------------------------------------------
 spool off; 
