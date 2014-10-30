@@ -45,7 +45,7 @@ create bitmap index p_type_p_size_idx on part(p_type, p_size);
    Creamos un indice B+ sobre el atributo s_comment de la 
    tabla supplier
 */
-create index s_comment_idx on suppliers(s_commnet);
+create index s_comment_idx on suppliers(s_comment);
 
 /*
   No es necesario un indice sobre r_name porque el numero de
