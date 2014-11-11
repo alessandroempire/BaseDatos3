@@ -1,4 +1,4 @@
-define FILE=straceSpool.sql
+define FILE=planEjecucionSpool.sql
 spool &FILE
 
 --Consultas Proyecto Fase I - Tipo A (CI5313):
