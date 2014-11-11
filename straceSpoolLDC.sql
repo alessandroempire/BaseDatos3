@@ -9,18 +9,18 @@ new  15: or (n1.n_name = 'PERU' and n2.n_name = 'IRAN'))
 
   COUNT(*)                                                                      
 ----------                                                                      
-         0                                                                      
+         4                                                                      
 
 
 Statistics
 ----------------------------------------------------------                      
-          0  recursive calls                                                    
+          1  recursive calls                                                    
           0  db block gets                                                      
-          5  consistent gets                                                    
-          0  physical reads                                                     
-          0  redo size                                                          
-        525  bytes sent via SQL*Net to client                                   
-        524  bytes received via SQL*Net from client                             
+     136355  consistent gets                                                    
+     136127  physical reads                                                     
+        116  redo size                                                          
+        208  bytes sent via SQL*Net to client                                   
+        252  bytes received via SQL*Net from client                             
           2  SQL*Net roundtrips to/from client                                  
           0  sorts (memory)                                                     
           0  sorts (disk)                                                       
@@ -43,13 +43,13 @@ new  10: and L_SHIPDATE > '13-JAN-94'
 
 Statistics
 ----------------------------------------------------------                      
-          0  recursive calls                                                    
+          1  recursive calls                                                    
           0  db block gets                                                      
-          5  consistent gets                                                    
-          0  physical reads                                                     
+     136134  consistent gets                                                    
+     136124  physical reads                                                     
           0  redo size                                                          
-        525  bytes sent via SQL*Net to client                                   
-        524  bytes received via SQL*Net from client                             
+        207  bytes sent via SQL*Net to client                                   
+        252  bytes received via SQL*Net from client                             
           2  SQL*Net roundtrips to/from client                                  
           0  sorts (memory)                                                     
           0  sorts (disk)                                                       
@@ -64,20 +64,20 @@ new   6: P_TYPE like 'STANDARD PLATED COPPER' and
 
   COUNT(*)                                                                      
 ----------                                                                      
-         0                                                                      
+         1                                                                      
 
 
 Statistics
 ----------------------------------------------------------                      
-         10  recursive calls                                                    
+          8  recursive calls                                                    
           0  db block gets                                                      
-        156  consistent gets                                                    
-          0  physical reads                                                     
+       4122  consistent gets                                                    
+       3850  physical reads                                                     
           0  redo size                                                          
-        525  bytes sent via SQL*Net to client                                   
-        524  bytes received via SQL*Net from client                             
+        208  bytes sent via SQL*Net to client                                   
+        252  bytes received via SQL*Net from client                             
           2  SQL*Net roundtrips to/from client                                  
-          1  sorts (memory)                                                     
+          0  sorts (memory)                                                     
           0  sorts (disk)                                                       
           1  rows processed                                                     
 
@@ -89,13 +89,13 @@ Statistics
 
 Statistics
 ----------------------------------------------------------                      
-          0  recursive calls                                                    
+          1  recursive calls                                                    
           0  db block gets                                                      
-      55056  consistent gets                                                    
-      54761  physical reads                                                     
+      24393  consistent gets                                                    
+      24385  physical reads                                                     
           0  redo size                                                          
-        526  bytes sent via SQL*Net to client                                   
-        524  bytes received via SQL*Net from client                             
+        208  bytes sent via SQL*Net to client                                   
+        252  bytes received via SQL*Net from client                             
           2  SQL*Net roundtrips to/from client                                  
           0  sorts (memory)                                                     
           0  sorts (disk)                                                       
@@ -113,20 +113,20 @@ new   7: R_NAME='ASIA' and
 
   COUNT(*)                                                                      
 ----------                                                                      
-         0                                                                      
+         8                                                                      
 
 
 Statistics
 ----------------------------------------------------------                      
-        294  recursive calls                                                    
+          8  recursive calls                                                    
           0  db block gets                                                      
-       1356  consistent gets                                                    
-          3  physical reads                                                     
-          0  redo size                                                          
-        525  bytes sent via SQL*Net to client                                   
-        524  bytes received via SQL*Net from client                             
+       4187  consistent gets                                                    
+       3856  physical reads                                                     
+        116  redo size                                                          
+        208  bytes sent via SQL*Net to client                                   
+        252  bytes received via SQL*Net from client                             
           2  SQL*Net roundtrips to/from client                                  
-          0  sorts (memory)                                                     
+          1  sorts (memory)                                                     
           0  sorts (disk)                                                       
           1  rows processed                                                     
 
