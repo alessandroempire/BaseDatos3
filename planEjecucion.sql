@@ -7,7 +7,7 @@ spool &FILE
 --Q1: Valor de los productos enviados de un país a otro 
 --value for nation1: IRAN Y PERU
 ALTER SESSION SET EVENTS= 'immediate trace name flush_cache';
-set autotrace on statistics;
+set autotrace traceonly;
 
 select count(*) from (
 select supp_nation, cust_nation, l_year, sum(volume) as revenue
@@ -36,7 +36,7 @@ set autotrace off;
 --------------------------------------------------------------------------------------------------
 --Q2: Prioridad de envío 
 ALTER SESSION SET EVENTS= 'immediate trace name flush_cache';
-set autotrace on statistics;
+set autotrace traceonly;
 
 select count(*) from (
 select L_ORDERKEY, sum(L_EXTENDEDPRICE*(1-L_DISCOUNT)) as REVENUE,
@@ -57,7 +57,7 @@ set autotrace off;
 --------------------------------------------------------------------------------------------------
 --Q3: Relación entre libros y fabricantes 
 ALTER SESSION SET EVENTS= 'immediate trace name flush_cache';
-set autotrace on statistics;
+set autotrace traceonly;
 
 select count(*) from (
 select P_BRAND, P_TYPE, count(distinct PS_SUPPKEY) as SUPPLIER_CNT
@@ -76,7 +76,7 @@ set autotrace off;
 --------------------------------------------------------------------------------------------------
 --Q4: Distribución de clientes 
 ALTER SESSION SET EVENTS= 'immediate trace name flush_cache';
-set autotrace on statistics;
+set autotrace traceonly;
 
 select count(*) from (
 select C_COUNT, count(*) as CUSTDIST
@@ -95,7 +95,7 @@ set autotrace off;
 --------------------------------------------------------------------------------------------------
 --Q5: Proveedor con el menor precio 
 ALTER SESSION SET EVENTS= 'immediate trace name flush_cache';
-set autotrace on statistics;
+set autotrace traceonly;
 
 select count(*) from (
 select PS_SUPPKEY, S_NAME, S_NATIONKEY, S_PHONE, PS_SUPPCOST

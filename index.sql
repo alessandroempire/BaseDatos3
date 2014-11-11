@@ -35,13 +35,13 @@ create index o_orderdate_idx on orderss(o_orderdate);
   Creamos un indice compuesto bitmap para la consulta Q3,
   se coloca p_type primero porque es mas selectivo que p_brand
 */
-create bitmap index p_type_p_bran_idx on part(p_type, p_brand);
+--create bitmap index p_type_p_bran_idx on part(p_type, p_brand);
 
 /*
   Creamos un indice compuesto bitmap sobre la consulta Q5,
   se coloca p_type primero porque es mas selectivo que p_size
 */
-create bitmap index p_type_p_size_idx on part(p_type, p_size);
+--create bitmap index p_type_p_size_idx on part(p_type, p_size);
 
 # Los indices bitmap simples
 create bitmap index p_type_idx on part(p_type);
