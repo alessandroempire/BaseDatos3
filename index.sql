@@ -11,6 +11,8 @@ set tab off
 */
 create index l_shipdate_idx on lineitems(l_shipdate);
 
+
+
 /*
    Creamos un indice arbol B+ sobre el atributo n_name de la tabla
    NATIONS
@@ -40,6 +42,11 @@ create bitmap index p_type_p_bran_idx on part(p_type, p_brand);
   se coloca p_type primero porque es mas selectivo que p_size
 */
 create bitmap index p_type_p_size_idx on part(p_type, p_size);
+
+# Los indices bitmap simples
+create bitmap index p_type_idx on part(p_type);
+create bitmap index p_size_idx on part(p_size);
+create bitmap index p_brand_idx on part(p_brand); 
 
 /*
    Creamos un indice B+ sobre el atributo s_comment de la 
