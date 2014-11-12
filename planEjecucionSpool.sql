@@ -10,7 +10,6 @@ Enter value for nation1: IRAN
 old  15: or (n1.n_name = '&NATION2' and n2.n_name = '&NATION1'))
 new  15: or (n1.n_name = 'PERU' and n2.n_name = 'IRAN'))
 
-
 Execution Plan
 ----------------------------------------------------------                      
 Plan hash value: 1636081246                                                     
@@ -152,21 +151,6 @@ Note
    - dynamic sampling used for this statement (level=2)                         
 
 
-Statistics
-----------------------------------------------------------                      
-        102  recursive calls                                                    
-          0  db block gets                                                      
-     611930  consistent gets                                                    
-     624056  physical reads                                                     
-          0  redo size                                                          
-        526  bytes sent via SQL*Net to client                                   
-        523  bytes received via SQL*Net from client                             
-          2  SQL*Net roundtrips to/from client                                  
-          0  sorts (memory)                                                     
-          0  sorts (disk)                                                       
-          1  rows processed                                                     
-
-
 Session altered.
 
 Enter value for segment: MACHINERY
@@ -178,7 +162,6 @@ new   9: and O_ORDERDATE < '13-JAN-93'
 Enter value for date: 13-JAN-94
 old  10: and L_SHIPDATE > '&date'
 new  10: and L_SHIPDATE > '13-JAN-94'
-
 
 Execution Plan
 ----------------------------------------------------------                      
@@ -260,21 +243,6 @@ Note
    - dynamic sampling used for this statement (level=2)                         
 
 
-Statistics
-----------------------------------------------------------                      
-         42  recursive calls                                                    
-          6  db block gets                                                      
-     319890  consistent gets                                                    
-     325079  physical reads                                                     
-          0  redo size                                                          
-        525  bytes sent via SQL*Net to client                                   
-        523  bytes received via SQL*Net from client                             
-          2  SQL*Net roundtrips to/from client                                  
-          1  sorts (memory)                                                     
-          1  sorts (disk)                                                       
-          1  rows processed                                                     
-
-
 Session altered.
 
 Enter value for brand: Brand#51
@@ -283,7 +251,6 @@ new   5: P_BRAND = 'Brand#51' and
 Enter value for type: STANDARD PLATED COPPER
 old   6: P_TYPE like '&type' and
 new   6: P_TYPE like 'STANDARD PLATED COPPER' and
-
 
 Execution Plan
 ----------------------------------------------------------                      
@@ -342,23 +309,7 @@ Note
    - dynamic sampling used for this statement (level=2)                         
 
 
-Statistics
-----------------------------------------------------------                      
-         10  recursive calls                                                    
-          0  db block gets                                                      
-       4316  consistent gets                                                    
-       4908  physical reads                                                     
-          0  redo size                                                          
-        526  bytes sent via SQL*Net to client                                   
-        523  bytes received via SQL*Net from client                             
-          2  SQL*Net roundtrips to/from client                                  
-          1  sorts (memory)                                                     
-          0  sorts (disk)                                                       
-          1  rows processed                                                     
-
-
 Session altered.
-
 
 
 Execution Plan
@@ -415,33 +366,17 @@ Note
    - dynamic sampling used for this statement (level=2)                         
 
 
-Statistics
-----------------------------------------------------------                      
-          0  recursive calls                                                    
-          0  db block gets                                                      
-      55056  consistent gets                                                    
-      55048  physical reads                                                     
-          0  redo size                                                          
-        526  bytes sent via SQL*Net to client                                   
-        523  bytes received via SQL*Net from client                             
-          2  SQL*Net roundtrips to/from client                                  
-          0  sorts (memory)                                                     
-          0  sorts (disk)                                                       
-          1  rows processed                                                     
-
-
 Session altered.
 
 Enter value for psize: 6
 old   5: P_SIZE = &psize and
 new   5: P_SIZE = 6 and
-Enter value for ptype: PROMO PLATED STEEL 
+Enter value for ptype: PROMO PLATED STEEL
 old   6: P_TYPE like '%&ptype' and
-new   6: P_TYPE like '%PROMO PLATED STEEL ' and
+new   6: P_TYPE like '%PROMO PLATED STEEL' and
 Enter value for name: ASIA
 old   7: R_NAME='&name' and
 new   7: R_NAME='ASIA' and
-
 
 Execution Plan
 ----------------------------------------------------------                      
@@ -457,28 +392,28 @@ pSpc| Cost (%CPU)| Time     |
 -----------------------------                                                   
                                                                                 
 |   0 | SELECT STATEMENT                  |                 |     1 |   197 |   
-    |  3926   (1)| 00:00:48 |                                                   
+    |  3574   (1)| 00:00:43 |                                                   
                                                                                 
 |   1 |  SORT AGGREGATE                   |                 |     1 |   197 |   
     |            |          |                                                   
                                                                                 
-|*  2 |   HASH JOIN                       |                 |   203K|    38M|  3
-832K|  3926   (1)| 00:00:48 |                                                   
+|*  2 |   HASH JOIN                       |                 |   108K|    20M|  2
+040K|  3574   (1)| 00:00:43 |                                                   
                                                                                 
-|*  3 |    HASH JOIN                      |                 | 21420 |  3576K|   
-    |  1661   (1)| 00:00:20 |                                                   
+|*  3 |    HASH JOIN                      |                 | 11406 |  1904K|   
+    |  1395   (1)| 00:00:17 |                                                   
                                                                                 
 |*  4 |     TABLE ACCESS FULL             | REGION          |     1 |    40 |   
     |     2   (0)| 00:00:01 |                                                   
                                                                                 
-|*  5 |     HASH JOIN                     |                 |   107K|    13M|   
-    |  1658   (1)| 00:00:20 |                                                   
+|*  5 |     HASH JOIN                     |                 | 57028 |  7295K|   
+    |  1393   (1)| 00:00:17 |                                                   
                                                                                 
 |   6 |      TABLE ACCESS FULL            | NATION          |    25 |   650 |   
     |     2   (0)| 00:00:01 |                                                   
                                                                                 
-|*  7 |      HASH JOIN                    |                 |   107K|    10M|   
-    |  1655   (1)| 00:00:20 |                                                   
+|*  7 |      HASH JOIN                    |                 | 57028 |  5847K|   
+    |  1390   (1)| 00:00:17 |                                                   
                                                                                 
 |   8 |       TABLE ACCESS FULL           | SUPPLIER        | 11178 |   283K|   
     |    58   (0)| 00:00:01 |                                                   
@@ -486,10 +421,10 @@ pSpc| Cost (%CPU)| Time     |
 |   9 |       NESTED LOOPS                |                 |       |       |   
     |            |          |                                                   
                                                                                 
-|  10 |        NESTED LOOPS               |                 |   107K|  8262K|   
-    |  1596   (1)| 00:00:20 |                                                   
+|  10 |        NESTED LOOPS               |                 | 57028 |  4399K|   
+    |  1331   (1)| 00:00:16 |                                                   
                                                                                 
-|* 11 |         TABLE ACCESS FULL         | PART            |   113 |  4520 |   
+|* 11 |         TABLE ACCESS FULL         | PART            |    60 |  2400 |   
     |  1029   (1)| 00:00:13 |                                                   
                                                                                 
 |* 12 |         INDEX RANGE SCAN          | PK_PARTSUPPLIER |   950 |       |   
@@ -522,25 +457,10 @@ Predicate Information (identified by operation id):
    4 - filter("R_NAME"='ASIA')                                                  
    5 - access("S_NATIONKEY"="N_NATIONKEY")                                      
    7 - access("PS_SUPPKEY"="S_SUPPKEY")                                         
-  11 - filter("P_SIZE"=6 AND "P_TYPE" LIKE '%PROMO PLATED STEEL ')              
+  11 - filter("P_SIZE"=6 AND "P_TYPE" LIKE '%PROMO PLATED STEEL')               
   12 - access("PS_PARTKEY"="P_PARTKEY")                                         
                                                                                 
 Note                                                                            
 -----                                                                           
    - dynamic sampling used for this statement (level=2)                         
-
-
-Statistics
-----------------------------------------------------------                      
-        145  recursive calls                                                    
-          0  db block gets                                                      
-       6226  consistent gets                                                    
-       4850  physical reads                                                     
-          0  redo size                                                          
-        525  bytes sent via SQL*Net to client                                   
-        523  bytes received via SQL*Net from client                             
-          2  SQL*Net roundtrips to/from client                                  
-          0  sorts (memory)                                                     
-          0  sorts (disk)                                                       
-          1  rows processed                                                     
 

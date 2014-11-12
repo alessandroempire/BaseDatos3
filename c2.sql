@@ -1,0 +1,17 @@
+--Q2: Prioridad de envío 
+
+select count(*) from (
+select L_ORDERKEY, sum(L_EXTENDEDPRICE*(1-L_DISCOUNT)) as REVENUE,
+O_ORDERDATE,
+O_SHIPPRIORITY
+from CI5313.CUSTOMER, CI5313.ORDERS, CI5313.LINEITEM
+where C_MKTSEGMENT = '&segment'
+and C_CUSTKEY = O_CUSTKEY
+and L_ORDERKEY = O_ORDERKEY
+and O_ORDERDATE < '&date'
+and L_SHIPDATE > '&date'
+group by
+L_ORDERKEY, O_ORDERDATE, O_SHIPPRIORITY
+order by
+REVENUE desc, O_ORDERDATE);
+
