@@ -1,0 +1,1 @@
+/usr/oracle/app/diag/rdbms/rosetta/rosetta/trace

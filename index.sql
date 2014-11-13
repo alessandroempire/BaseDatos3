@@ -5,58 +5,48 @@ set trimout on
 set space 1
 set tab off
 
-/*
-   Creamos un index B+ sobre el atributo l_shipdate de la tabla
-   lineitems
-*/
-create index l_shipdate_idx on lineitems(l_shipdate);
+-- Indices sobre tabla PART
+-- Los indices bitmap simples
+--create bitmap index p_type_idx on part(p_type);
+--create bitmap index p_size_idx on part(p_size);
+--create bitmap index p_brand_idx on part(p_brand); 
 
+--create index p_type_idxb_ on part(p_type);
+--create index p_size_idxb on part(p_size);
+--create index p_brand_idxb on part(p_brand); 
 
+create index p_compuestoA on part(p_type, p_size);
+create index p_compuestoB on part(p_type, p_brand);
 
-/*
-   Creamos un indice arbol B+ sobre el atributo n_name de la tabla
-   NATIONS
-*/
-create index n_name_idx on nations(n_name);
+-- Indices sobre tabla LINEITEM
+-- Cremaos index B+ sobre l_shipdate
+create index l_shipdate_idx on lineitem(l_shipdate);
 
-/*
-  Creamos un indice Bitmap sobre el atributo c_mktsegment de la 
-  tabla customers (ver lamina de porque)
-*/
-create bitmap index c_mktsegment_idx on customers(c_mktsegment);
+-- Indices sobre tabla CUSTOMER
+-- Indce Bitmap sobre atributo c_mktsegment
+create bitmap index c_mktsegment_idx on customer(c_mktsegment);
 
-/*
-   Creamos un indice B+ sobre el atributo o_orderdate de la
-   tabla orderss
-*/
-create index o_orderdate_idx on orderss(o_orderdate);
+-- Indice sobre la tabla ORDERS
+-- Indice B+
+create index o_orderdate_idx on orders(o_orderdate);
 
-/*
-  Creamos un indice compuesto bitmap para la consulta Q3,
-  se coloca p_type primero porque es mas selectivo que p_brand
-*/
---create bitmap index p_type_p_bran_idx on part(p_type, p_brand);
+-- Indice sobre tabla partsupplier
+-- Indice B+ sobre atributo s_comment
+--create index s_comment_idx on supplier(s_comment); no vale la pena?
+create index ps_suppcost_idx on partsupplier(ps_suppcost);
 
 /*
-  Creamos un indice compuesto bitmap sobre la consulta Q5,
-  se coloca p_type primero porque es mas selectivo que p_size
-*/
---create bitmap index p_type_p_size_idx on part(p_type, p_size);
-
-# Los indices bitmap simples
-create bitmap index p_type_idx on part(p_type);
-create bitmap index p_size_idx on part(p_size);
-create bitmap index p_brand_idx on part(p_brand); 
-
-/*
-   Creamos un indice B+ sobre el atributo s_comment de la 
-   tabla supplier
-*/
-create index s_comment_idx on suppliers(s_comment);
-
-/*
+  Indice sobre tabla REGION
   No es necesario un indice sobre r_name porque el numero de
   tuplas es muy bajo
+  No creamos indices en la tabla REGION porque tiene apenas 5 tuplas
+  Entonces la tabla entera se puede cargar en memoria
+*/
+
+/*
+  Indice sobre tabla NATION
+  No crearemos un indice sobre la tabla NATION porque tiene apenas 25 tuplas
+  y por tanto la tabla entera se puede cargar en memoria
 */
 
 spool off; 
