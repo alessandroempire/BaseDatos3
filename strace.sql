@@ -1,4 +1,4 @@
-define FILE=straceH35Spool.sql
+define FILE=straceH5Spool.sql
 spool &FILE
 set lines 90
 set trimout on
@@ -108,7 +108,7 @@ set autotrace on statistics;
 
 select count(*) from (
 select 
-/*+ INDEX (PART p_type_idxb p_size_idxb p_brand_idxb)*/
+/*+ INDEX (PART p_compuestoA p_compuestoB)*/
 PS_SUPPKEY, S_NAME, S_NATIONKEY, S_PHONE, PS_SUPPCOST
 from CI5313.PARTSUPPLIER E, CI5313.SUPPLIER, CI5313.NATION, CI5313.REGION, CI5313.PART
 where PS_PARTKEY=P_PARTKEY and

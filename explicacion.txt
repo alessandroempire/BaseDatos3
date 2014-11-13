@@ -35,6 +35,10 @@ El hecho que estos atributos tengas un numero bajo de valores diferentes nos per
 
 2) Indices B+ sobre p_type P_size y p_brand
 Si analizamos el plan de ejecucion, veremos de nuevo que el optimizador escoge no usar estos indices. Por tanto se reduce a un total de 4063 physical reads usando otros indices sobre otras tablas como partsupplier con el atributo ps_suppcost
+Ahora bien, podemos agregar un HINT a la consulta /*+ INDEX (PART p_size p_type p_brand) */
+Esto obliga al manejador a usar estos indices sobre estos atributos al momento de realizar la consulta. Esto se ve claro si observamos el plan de Ejecucion, en donde usa indice sobre p_type_idxb y p_brand_idxb. Ademas observamos que comparado con los physical read de la consulta cuando no tenia indices, ahora en este nuevo caso se redujo a 2762 physical reads. Se redujo substancialmente pero no se compara con el primer grupo de indices. 
 
 3) Indices B+ compuesto:  (p_type, p_size) y (p_type, p_brand)
 Al analizar el plan de ejecucion nos fijamos que el manejador no usas estos indices para realizar las consultas sobre la tabla PART. Esta decision segura debe ser que el manejador se percato que al usar este indice esta incurriendo en un overhead ya que realiza busquedas por separada lo cual no lo hacen eficiente con un indice compuesto. Por eso vemos que su physical read se redujo a 4063 apenas.
+Ahora bien, podemos agregar un HINT a la consulta:/*+ INDEX (PART p_compuestoA p_compuestoB)*/
+Esto le obliga al manejador a usar estos dos indices compuesta al momento de realizar la consulta. Si observamos en plan de Ejecucion solo uso el p_compuestoA y esto se debe a que la consulta trabaja solo sobre atributos p_size y p_type de la tabla PART. Si vamos a ver sus estadisticas vemos que se redujo a un total de 1307 physical reads. Esto es porque el manejador aprovecha mejor el hecho que tiene un indice con dos atributos al cual debe hacer scan. 

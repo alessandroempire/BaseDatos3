@@ -1,0 +1,310 @@
+
+TKPROF: Release 11.2.0.1.0 - Development on Thu Nov 13 01:36:57 2014
+
+Copyright (c) 1982, 2009, Oracle and/or its affiliates.  All rights reserved.
+
+Trace file: rosetta_ora_31516.trc
+Sort options: default
+
+********************************************************************************
+count    = number of times OCI procedure was executed
+cpu      = cpu time in seconds executing 
+elapsed  = elapsed time in seconds executing
+disk     = number of physical reads of buffers from disk
+query    = number of buffers gotten for consistent read
+current  = number of buffers gotten in current mode (usually for update)
+rows     = number of rows processed by the fetch or execute call
+********************************************************************************
+
+SQL ID: 4tk6t8tfsfqbf
+Plan Hash: 0
+alter session set sql_trace=true
+
+
+call     count       cpu    elapsed       disk      query    current        rows
+------- ------  -------- ---------- ---------- ---------- ----------  ----------
+Parse        0      0.00       0.00          0          0          0           0
+Execute      3      0.00       0.00          0          0          0           0
+Fetch        0      0.00       0.00          0          0          0           0
+------- ------  -------- ---------- ---------- ---------- ----------  ----------
+total        3      0.00       0.00          0          0          0           0
+
+Misses in library cache during parse: 0
+Misses in library cache during execute: 3
+Optimizer mode: ALL_ROWS
+Parsing user id: 91  (CI5313)
+********************************************************************************
+
+select supp_nation, cust_nation, l_year, sum(volume) as revenue
+from (select
+n1.n_name as supp_nation,
+n2.n_name as cust_nation,
+extract(year from l_shipdate) as l_year,
+l_extendedprice * (1 - l_discount) as volume
+from CI5313.supplier, CI5313.lineitem, CI5313.orders, CI5313.customer, CI5313.nation n1, CI5313.nation n2
+where s_suppkey = l_suppkey
+and o_orderkey = l_orderkey
+and c_custkey = o_custkey
+and s_nationkey = n1.n_nationkey
+and c_nationkey = n2.n_nationkey
+and ((n1.n_name = 'j' and n2.n_name = 'j')
+or (n1.n_name = 'j' and n2.n_name = 'j'))
+and l_shipdate between date '1995-01-01' and date '1996-12-31')
+group by supp_nation,
+cust_nation,
+l_year
+order by supp_nation,
+cust_nation,
+l_year
+
+call     count       cpu    elapsed       disk      query    current        rows
+------- ------  -------- ---------- ---------- ---------- ----------  ----------
+Parse        1      0.04       0.24          0          0          0           0
+Execute      1      0.00       0.00          0          0          0           0
+Fetch        1      0.00       0.03          2          3          0           0
+------- ------  -------- ---------- ---------- ---------- ----------  ----------
+total        3      0.04       0.27          2          3          0           0
+
+Misses in library cache during parse: 1
+Optimizer mode: ALL_ROWS
+Parsing user id: 91  (CI5313)
+
+Rows     Row Source Operation
+-------  ---------------------------------------------------
+      0  SORT GROUP BY (cr=3 pr=2 pw=0 time=0 us cost=85089 size=40626 card=366)
+      0   HASH JOIN  (cr=3 pr=2 pw=0 time=0 us cost=85088 size=77256 card=696)
+      0    TABLE ACCESS FULL NATION (cr=3 pr=2 pw=0 time=0 us cost=2 size=29 card=1)
+      0    HASH JOIN  (cr=0 pr=0 pw=0 time=0 us cost=85086 size=2853190 card=34795)
+      0     HASH JOIN  (cr=0 pr=0 pw=0 time=0 us cost=83871 size=2574830 card=34795)
+      0      HASH JOIN  (cr=0 pr=0 pw=0 time=0 us cost=67253 size=2192085 card=34795)
+      0       HASH JOIN  (cr=0 pr=0 pw=0 time=0 us cost=61 size=7200 card=200)
+      0        TABLE ACCESS FULL NATION (cr=0 pr=0 pw=0 time=0 us cost=2 size=29 card=1)
+      0        TABLE ACCESS FULL SUPPLIER (cr=0 pr=0 pw=0 time=0 us cost=58 size=70000 card=10000)
+      0       TABLE ACCESS FULL LINEITEM (cr=0 pr=0 pw=0 time=0 us cost=67186 size=46973412 card=1739756)
+      0      TABLE ACCESS FULL ORDERS (cr=0 pr=0 pw=0 time=0 us cost=14853 size=16500000 card=1500000)
+      0     TABLE ACCESS FULL CUSTOMER (cr=0 pr=0 pw=0 time=0 us cost=929 size=1200000 card=150000)
+
+
+Rows     Execution Plan
+-------  ---------------------------------------------------
+      0  SELECT STATEMENT   MODE: ALL_ROWS
+      0   SORT (GROUP BY)
+      0    HASH JOIN
+      0     TABLE ACCESS   MODE: ANALYZED (FULL) OF 'NATION' (TABLE)
+      0     HASH JOIN
+      0      HASH JOIN
+      0       HASH JOIN
+      0        HASH JOIN
+      0         TABLE ACCESS   MODE: ANALYZED (FULL) OF 'NATION' 
+                    (TABLE)
+      0         TABLE ACCESS   MODE: ANALYZED (FULL) OF 'SUPPLIER' 
+                    (TABLE)
+      0        TABLE ACCESS   MODE: ANALYZED (FULL) OF 'LINEITEM' 
+                   (TABLE)
+      0       TABLE ACCESS   MODE: ANALYZED (FULL) OF 'ORDERS' (TABLE)
+
+      0      TABLE ACCESS   MODE: ANALYZED (FULL) OF 'CUSTOMER' (TABLE)
+
+
+********************************************************************************
+
+SQL ID: aam2chsgpj7mb
+Plan Hash: 0
+alter session set sql_trace=false
+
+
+call     count       cpu    elapsed       disk      query    current        rows
+------- ------  -------- ---------- ---------- ---------- ----------  ----------
+Parse        3      0.00       0.00          0          0          0           0
+Execute      3      0.00       0.00          0          0          0           0
+Fetch        0      0.00       0.00          0          0          0           0
+------- ------  -------- ---------- ---------- ---------- ----------  ----------
+total        6      0.00       0.00          0          0          0           0
+
+Misses in library cache during parse: 3
+Optimizer mode: ALL_ROWS
+Parsing user id: 91  (CI5313)
+********************************************************************************
+
+select P_BRAND, P_TYPE, count(distinct PS_SUPPKEY) as SUPPLIER_CNT
+from CI5313.PARTSUPPLIER, CI5313.PART
+where P_PARTKEY = PS_PARTKEY and
+P_BRAND = 'Brand#51' and
+P_TYPE like 'STANDARD PLATED COPPER' and
+PS_SUPPKEY not in (select S_SUPPKEY from CI5313.SUPPLIER
+where S_COMMENT like '%Customer%Complaints')
+group by
+P_BRAND, P_TYPE
+order by
+SUPPLIER_CNT desc, P_BRAND, P_TYPE
+
+call     count       cpu    elapsed       disk      query    current        rows
+------- ------  -------- ---------- ---------- ---------- ----------  ----------
+Parse        1      0.01       0.07          0          0          0           0
+Execute      1      0.00       0.00          0          0          0           0
+Fetch        2      0.17       3.37       4054       4106          0           1
+------- ------  -------- ---------- ---------- ---------- ----------  ----------
+total        4      0.19       3.44       4054       4106          0           1
+
+Misses in library cache during parse: 1
+Optimizer mode: ALL_ROWS
+Parsing user id: 91  (CI5313)
+
+Rows     Row Source Operation
+-------  ---------------------------------------------------
+      1  SORT ORDER BY (cr=4106 pr=4054 pw=0 time=0 us cost=1184 size=46 card=1)
+      1   HASH GROUP BY (cr=4106 pr=4054 pw=0 time=0 us cost=1184 size=46 card=1)
+    213    VIEW  VM_NWVW_1 (cr=4106 pr=4054 pw=0 time=1802 us cost=1182 size=8188 card=178)
+    213     HASH GROUP BY (cr=4106 pr=4054 pw=0 time=742 us cost=1182 size=20470 card=178)
+    216      HASH JOIN ANTI (cr=4106 pr=4054 pw=0 time=860 us cost=1181 size=20470 card=178)
+    216       NESTED LOOPS  (cr=3896 pr=3846 pw=0 time=248647 us cost=1123 size=8836 card=188)
+     54        TABLE ACCESS FULL PART (cr=3784 pr=3782 pw=0 time=1103036 us cost=1029 size=1786 card=47)
+    216        INDEX RANGE SCAN PK_PARTSUPPLIER (cr=112 pr=64 pw=0 time=456 us cost=2 size=36 card=4)(object id 75356)
+      1       TABLE ACCESS FULL SUPPLIER (cr=210 pr=208 pw=0 time=0 us cost=58 size=34000 card=500)
+
+
+Rows     Execution Plan
+-------  ---------------------------------------------------
+      0  SELECT STATEMENT   MODE: ALL_ROWS
+      1   SORT (ORDER BY)
+      1    HASH (GROUP BY)
+    213     VIEW OF 'VM_NWVW_1' (VIEW)
+    213      HASH (GROUP BY)
+    216       HASH JOIN (ANTI)
+    216        NESTED LOOPS
+     54         TABLE ACCESS   MODE: ANALYZED (FULL) OF 'PART' 
+                    (TABLE)
+    216         INDEX   MODE: ANALYZED (RANGE SCAN) OF 
+                    'PK_PARTSUPPLIER' (INDEX (UNIQUE))
+      1        TABLE ACCESS   MODE: ANALYZED (FULL) OF 'SUPPLIER' 
+                   (TABLE)
+
+********************************************************************************
+
+select PS_SUPPKEY, S_NAME, S_NATIONKEY, S_PHONE, PS_SUPPCOST
+from CI5313.PARTSUPPLIER E, CI5313.SUPPLIER, CI5313.NATION, CI5313.REGION, CI5313.PART
+where PS_PARTKEY=P_PARTKEY and
+P_SIZE = 6 and
+P_TYPE like '%PROMO PLATED STEEL' and
+R_NAME='ASIA' and
+PS_SUPPKEY = S_SUPPKEY and
+S_NATIONKEY = N_NATIONKEY and
+N_REGIONKEY=R_REGIONKEY and
+PS_SUPPCOST=
+(SELECT min( PS_SUPPCOST)
+from CI5313.PARTSUPPLIER I
+where E.PS_PARTKEY=I.PS_PARTKEY)
+
+call     count       cpu    elapsed       disk      query    current        rows
+------- ------  -------- ---------- ---------- ---------- ----------  ----------
+Parse        1      0.06       0.06          0          0          0           0
+Execute      1      0.00       0.00          0          0          0           0
+Fetch        2      0.14       1.05       3843       4167          0           8
+------- ------  -------- ---------- ---------- ---------- ----------  ----------
+total        4      0.20       1.12       3843       4167          0           8
+
+Misses in library cache during parse: 1
+Optimizer mode: ALL_ROWS
+Parsing user id: 91  (CI5313)
+
+Rows     Row Source Operation
+-------  ---------------------------------------------------
+      8  FILTER  (cr=4167 pr=3843 pw=0 time=0 us)
+     35   HASH JOIN  (cr=4096 pr=3843 pw=0 time=15606 us cost=1617 size=17792 card=139)
+     25    TABLE ACCESS FULL NATION (cr=3 pr=0 pw=0 time=72 us cost=2 size=150 card=25)
+    124    HASH JOIN  (cr=4093 pr=3843 pw=0 time=615 us cost=1615 size=84790 card=695)
+    124     NESTED LOOPS  (cr=3882 pr=3843 pw=0 time=4674 us)
+    124      NESTED LOOPS  (cr=3851 pr=3812 pw=0 time=1353 us cost=1556 size=50735 card=695)
+     31       MERGE JOIN CARTESIAN (cr=3787 pr=3783 pw=0 time=360 us cost=1031 size=10325 card=175)
+      1        TABLE ACCESS FULL REGION (cr=3 pr=2 pw=0 time=0 us cost=2 size=29 card=1)
+     31        BUFFER SORT (cr=3784 pr=3781 pw=0 time=210 us cost=1029 size=5250 card=175)
+     31         TABLE ACCESS FULL PART (cr=3784 pr=3781 pw=0 time=57030 us cost=1029 size=5250 card=175)
+    124       INDEX RANGE SCAN PK_PARTSUPPLIER (cr=64 pr=29 pw=0 time=339 us cost=2 size=0 card=4)(object id 75356)
+    124      TABLE ACCESS BY INDEX ROWID PARTSUPPLIER (cr=31 pr=31 pw=0 time=0 us cost=3 size=56 card=4)
+  10000     TABLE ACCESS FULL SUPPLIER (cr=211 pr=0 pw=0 time=23795 us cost=58 size=490000 card=10000)
+     23   SORT AGGREGATE (cr=71 pr=0 pw=0 time=0 us)
+     92    TABLE ACCESS BY INDEX ROWID PARTSUPPLIER (cr=71 pr=0 pw=0 time=534 us cost=4 size=40 card=4)
+     92     INDEX RANGE SCAN PK_PARTSUPPLIER (cr=48 pr=0 pw=0 time=174 us cost=3 size=0 card=4)(object id 75356)
+
+
+Rows     Execution Plan
+-------  ---------------------------------------------------
+      0  SELECT STATEMENT   MODE: ALL_ROWS
+      8   FILTER
+     35    HASH JOIN
+     25     TABLE ACCESS   MODE: ANALYZED (FULL) OF 'NATION' (TABLE)
+    124     HASH JOIN
+    124      NESTED LOOPS
+    124       NESTED LOOPS
+     31        MERGE JOIN (CARTESIAN)
+      1         TABLE ACCESS   MODE: ANALYZED (FULL) OF 'REGION' 
+                    (TABLE)
+     31         BUFFER (SORT)
+     31          TABLE ACCESS   MODE: ANALYZED (FULL) OF 'PART' 
+                     (TABLE)
+    124        INDEX   MODE: ANALYZED (RANGE SCAN) OF 
+                   'PK_PARTSUPPLIER' (INDEX (UNIQUE))
+    124       TABLE ACCESS   MODE: ANALYZED (BY INDEX ROWID) OF 
+                  'PARTSUPPLIER' (TABLE)
+  10000      TABLE ACCESS   MODE: ANALYZED (FULL) OF 'SUPPLIER' (TABLE)
+
+     23    SORT (AGGREGATE)
+     92     TABLE ACCESS   MODE: ANALYZED (BY INDEX ROWID) OF 
+                'PARTSUPPLIER' (TABLE)
+     92      INDEX   MODE: ANALYZED (RANGE SCAN) OF 'PK_PARTSUPPLIER' 
+                 (INDEX (UNIQUE))
+
+
+
+
+********************************************************************************
+
+OVERALL TOTALS FOR ALL NON-RECURSIVE STATEMENTS
+
+call     count       cpu    elapsed       disk      query    current        rows
+------- ------  -------- ---------- ---------- ---------- ----------  ----------
+Parse        6      0.12       0.39          0          0          0           0
+Execute      9      0.00       0.00          0          0          0           0
+Fetch        5      0.32       4.45       7899       8276          0           9
+------- ------  -------- ---------- ---------- ---------- ----------  ----------
+total       20      0.44       4.85       7899       8276          0           9
+
+Misses in library cache during parse: 6
+Misses in library cache during execute: 3
+
+
+OVERALL TOTALS FOR ALL RECURSIVE STATEMENTS
+
+call     count       cpu    elapsed       disk      query    current        rows
+------- ------  -------- ---------- ---------- ---------- ----------  ----------
+Parse       21      0.00       0.00          0          0          0           0
+Execute     88      0.00       0.00          0          0          0           0
+Fetch      243      0.01       0.50         11        397          0         160
+------- ------  -------- ---------- ---------- ---------- ----------  ----------
+total      352      0.02       0.50         11        397          0         160
+
+Misses in library cache during parse: 0
+
+    9  user  SQL statements in session.
+   88  internal SQL statements in session.
+   97  SQL statements in session.
+    3  statements EXPLAINed in this session.
+********************************************************************************
+Trace file: rosetta_ora_31516.trc
+Trace file compatibility: 11.1.0.7
+Sort options: default
+
+       1  session in tracefile.
+       9  user  SQL statements in trace file.
+      88  internal SQL statements in trace file.
+      97  SQL statements in trace file.
+      15  unique SQL statements in trace file.
+       3  SQL statements EXPLAINed using schema:
+           CI5313.prof$plan_table
+             Default table was used.
+             Table was created.
+             Table was dropped.
+    1041  lines in trace file.
+     100  elapsed seconds in trace file.
+
+

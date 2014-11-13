@@ -1,0 +1,713 @@
+
+TKPROF: Release 11.2.0.1.0 - Development on Thu Nov 13 02:28:05 2014
+
+Copyright (c) 1982, 2009, Oracle and/or its affiliates.  All rights reserved.
+
+Trace file: rosetta_ora_31874.trc
+Sort options: default
+
+********************************************************************************
+count    = number of times OCI procedure was executed
+cpu      = cpu time in seconds executing 
+elapsed  = elapsed time in seconds executing
+disk     = number of physical reads of buffers from disk
+query    = number of buffers gotten for consistent read
+current  = number of buffers gotten in current mode (usually for update)
+rows     = number of rows processed by the fetch or execute call
+********************************************************************************
+
+SQL ID: 4tk6t8tfsfqbf
+Plan Hash: 0
+alter session set sql_trace=true
+
+
+call     count       cpu    elapsed       disk      query    current        rows
+------- ------  -------- ---------- ---------- ---------- ----------  ----------
+Parse        0      0.00       0.00          0          0          0           0
+Execute     10      0.00       0.00          0          0          0           0
+Fetch        0      0.00       0.00          0          0          0           0
+------- ------  -------- ---------- ---------- ---------- ----------  ----------
+total       10      0.00       0.00          0          0          0           0
+
+Misses in library cache during parse: 0
+Misses in library cache during execute: 10
+Optimizer mode: ALL_ROWS
+Parsing user id: 91  (CI5313)
+********************************************************************************
+
+select P_BRAND, P_TYPE, count(distinct PS_SUPPKEY) as SUPPLIER_CNT
+from CI5313.PARTSUPPLIER, CI5313.PART
+where P_PARTKEY = PS_PARTKEY and
+P_BRAND = 'Brand#51' and
+P_TYPE like 'STANDARD PLATED COPPER' and
+PS_SUPPKEY not in (select S_SUPPKEY from CI5313.SUPPLIER
+where S_COMMENT like '%Customer%Complaints')
+group by
+P_BRAND, P_TYPE
+order by
+SUPPLIER_CNT desc, P_BRAND, P_TYPE
+
+call     count       cpu    elapsed       disk      query    current        rows
+------- ------  -------- ---------- ---------- ---------- ----------  ----------
+Parse        1      0.01       0.04          0          0          0           0
+Execute      1      0.00       0.00          0          0          0           0
+Fetch        2      0.03       0.03        106        412          0           1
+------- ------  -------- ---------- ---------- ---------- ----------  ----------
+total        4      0.05       0.08        106        412          0           1
+
+Misses in library cache during parse: 1
+Optimizer mode: ALL_ROWS
+Parsing user id: 91  (CI5313)
+
+Rows     Row Source Operation
+-------  ---------------------------------------------------
+      1  SORT ORDER BY (cr=412 pr=106 pw=0 time=0 us cost=199 size=46 card=1)
+      1   HASH GROUP BY (cr=412 pr=106 pw=0 time=0 us cost=199 size=46 card=1)
+    213    VIEW  VM_NWVW_1 (cr=412 pr=106 pw=0 time=2014 us cost=197 size=8188 card=178)
+    213     HASH GROUP BY (cr=412 pr=106 pw=0 time=742 us cost=197 size=20470 card=178)
+    216      HASH JOIN ANTI (cr=412 pr=106 pw=0 time=1075 us cost=196 size=20470 card=178)
+    216       NESTED LOOPS  (cr=202 pr=106 pw=0 time=13867 us cost=138 size=8836 card=188)
+     54        TABLE ACCESS BY INDEX ROWID PART (cr=90 pr=51 pw=0 time=74518 us cost=44 size=1786 card=47)
+     54         BITMAP CONVERSION TO ROWIDS (cr=36 pr=36 pw=0 time=0 us)
+      1          BITMAP AND  (cr=36 pr=36 pw=0 time=0 us)
+      1           BITMAP CONVERSION FROM ROWIDS (cr=9 pr=9 pw=0 time=0 us)
+   1354            INDEX RANGE SCAN P_TYPE_IDXB_ (cr=9 pr=9 pw=0 time=6273 us cost=8 size=0 card=0)(object id 75471)
+      1           BITMAP CONVERSION FROM ROWIDS (cr=27 pr=27 pw=0 time=0 us)
+   7920            INDEX RANGE SCAN P_BRAND_IDXB (cr=27 pr=27 pw=0 time=21585 us cost=25 size=0 card=0)(object id 75502)
+    216        INDEX RANGE SCAN PK_PARTSUPPLIER (cr=112 pr=55 pw=0 time=513 us cost=2 size=36 card=4)(object id 75356)
+      1       TABLE ACCESS FULL SUPPLIER (cr=210 pr=0 pw=0 time=0 us cost=58 size=34000 card=500)
+
+
+Rows     Execution Plan
+-------  ---------------------------------------------------
+      0  SELECT STATEMENT   MODE: ALL_ROWS
+      1   SORT (ORDER BY)
+      1    HASH (GROUP BY)
+    213     VIEW OF 'VM_NWVW_1' (VIEW)
+    213      HASH (GROUP BY)
+    216       HASH JOIN (ANTI)
+    216        NESTED LOOPS
+     54         TABLE ACCESS   MODE: ANALYZED (BY INDEX ROWID) OF 
+                    'PART' (TABLE)
+     54          INDEX   MODE: ANALYZED (RANGE SCAN) OF 
+                     'P_COMPUESTOB' (INDEX)
+      1         INDEX   MODE: ANALYZED (RANGE SCAN) OF 
+                    'PK_PARTSUPPLIER' (INDEX (UNIQUE))
+      1        TABLE ACCESS   MODE: ANALYZED (FULL) OF 'SUPPLIER' 
+                   (TABLE)
+
+********************************************************************************
+
+SQL ID: aam2chsgpj7mb
+Plan Hash: 0
+alter session set sql_trace=false
+
+
+call     count       cpu    elapsed       disk      query    current        rows
+------- ------  -------- ---------- ---------- ---------- ----------  ----------
+Parse       10      0.00       0.00          0          0          0           0
+Execute     10      0.00       0.00          0          0          0           0
+Fetch        0      0.00       0.00          0          0          0           0
+------- ------  -------- ---------- ---------- ---------- ----------  ----------
+total       20      0.01       0.01          0          0          0           0
+
+Misses in library cache during parse: 10
+Optimizer mode: ALL_ROWS
+Parsing user id: 91  (CI5313)
+********************************************************************************
+
+select PS_SUPPKEY, S_NAME, S_NATIONKEY, S_PHONE, PS_SUPPCOST
+from CI5313.PARTSUPPLIER E, CI5313.SUPPLIER, CI5313.NATION, CI5313.REGION, CI5313.PART
+where PS_PARTKEY=P_PARTKEY and
+P_SIZE = 6 and
+P_TYPE like '%PROMO PLATED STEEL' and
+R_NAME='ASIA' and
+PS_SUPPKEY = S_SUPPKEY and
+S_NATIONKEY = N_NATIONKEY and
+N_REGIONKEY=R_REGIONKEY and
+PS_SUPPCOST=
+(SELECT min( PS_SUPPCOST)
+from CI5313.PARTSUPPLIER I
+where E.PS_PARTKEY=I.PS_PARTKEY)
+
+call     count       cpu    elapsed       disk      query    current        rows
+------- ------  -------- ---------- ---------- ---------- ----------  ----------
+Parse        2      0.14       0.14          0          0          0           0
+Execute      2      0.00       0.00          0          0          0           0
+Fetch        4      0.13       0.14       7564       8334          0          16
+------- ------  -------- ---------- ---------- ---------- ----------  ----------
+total        8      0.28       0.28       7564       8334          0          16
+
+Misses in library cache during parse: 2
+Optimizer mode: ALL_ROWS
+Parsing user id: 91  (CI5313)
+
+Rows     Row Source Operation
+-------  ---------------------------------------------------
+      8  FILTER  (cr=4167 pr=3782 pw=0 time=0 us)
+     35   HASH JOIN  (cr=4096 pr=3782 pw=0 time=6936 us cost=1617 size=17792 card=139)
+     25    TABLE ACCESS FULL NATION (cr=3 pr=0 pw=0 time=96 us cost=2 size=150 card=25)
+    124    HASH JOIN  (cr=4093 pr=3782 pw=0 time=369 us cost=1615 size=84790 card=695)
+    124     NESTED LOOPS  (cr=3882 pr=3782 pw=0 time=3075 us)
+    124      NESTED LOOPS  (cr=3851 pr=3782 pw=0 time=861 us cost=1556 size=50735 card=695)
+     31       MERGE JOIN CARTESIAN (cr=3787 pr=3782 pw=0 time=210 us cost=1031 size=10325 card=175)
+      1        TABLE ACCESS FULL REGION (cr=3 pr=0 pw=0 time=0 us cost=2 size=29 card=1)
+     31        BUFFER SORT (cr=3784 pr=3782 pw=0 time=90 us cost=1029 size=5250 card=175)
+     31         TABLE ACCESS FULL PART (cr=3784 pr=3782 pw=0 time=47580 us cost=1029 size=5250 card=175)
+    124       INDEX RANGE SCAN PK_PARTSUPPLIER (cr=64 pr=0 pw=0 time=186 us cost=2 size=0 card=4)(object id 75356)
+    124      TABLE ACCESS BY INDEX ROWID PARTSUPPLIER (cr=31 pr=0 pw=0 time=0 us cost=3 size=56 card=4)
+  10000     TABLE ACCESS FULL SUPPLIER (cr=211 pr=0 pw=0 time=19871 us cost=58 size=490000 card=10000)
+     23   SORT AGGREGATE (cr=71 pr=0 pw=0 time=0 us)
+     92    TABLE ACCESS BY INDEX ROWID PARTSUPPLIER (cr=71 pr=0 pw=0 time=408 us cost=4 size=40 card=4)
+     92     INDEX RANGE SCAN PK_PARTSUPPLIER (cr=48 pr=0 pw=0 time=144 us cost=3 size=0 card=4)(object id 75356)
+
+
+Rows     Execution Plan
+-------  ---------------------------------------------------
+      0  SELECT STATEMENT   MODE: ALL_ROWS
+      8   FILTER
+     35    HASH JOIN
+     25     TABLE ACCESS   MODE: ANALYZED (FULL) OF 'NATION' (TABLE)
+    124     HASH JOIN
+    124      NESTED LOOPS
+    124       NESTED LOOPS
+     31        MERGE JOIN (CARTESIAN)
+      1         TABLE ACCESS   MODE: ANALYZED (FULL) OF 'REGION' 
+                    (TABLE)
+     31         BUFFER (SORT)
+     31          TABLE ACCESS   MODE: ANALYZED (FULL) OF 'PART' 
+                     (TABLE)
+    124        INDEX   MODE: ANALYZED (RANGE SCAN) OF 
+                   'PK_PARTSUPPLIER' (INDEX (UNIQUE))
+    124       TABLE ACCESS   MODE: ANALYZED (BY INDEX ROWID) OF 
+                  'PARTSUPPLIER' (TABLE)
+  10000      TABLE ACCESS   MODE: ANALYZED (FULL) OF 'SUPPLIER' (TABLE)
+
+     23    SORT (AGGREGATE)
+     92     TABLE ACCESS   MODE: ANALYZED (BY INDEX ROWID) OF 
+                'PARTSUPPLIER' (TABLE)
+     92      INDEX   MODE: ANALYZED (RANGE SCAN) OF 'PK_PARTSUPPLIER' 
+                 (INDEX (UNIQUE))
+
+********************************************************************************
+
+select P_BRAND, P_TYPE, count(distinct PS_SUPPKEY) as SUPPLIER_CNT
+from CI5313.PARTSUPPLIER, CI5313.PART
+where P_PARTKEY = PS_PARTKEY and
+P_BRAND = 'Brand#51' and
+P_TYPE like 'PROMO PLATED STEEL' and
+PS_SUPPKEY not in (select S_SUPPKEY from CI5313.SUPPLIER
+where S_COMMENT like '%Customer%Complaints')
+group by
+P_BRAND, P_TYPE
+order by
+SUPPLIER_CNT desc, P_BRAND, P_TYPE
+
+call     count       cpu    elapsed       disk      query    current        rows
+------- ------  -------- ---------- ---------- ---------- ----------  ----------
+Parse        1      0.00       0.04          0          0          0           0
+Execute      1      0.00       0.03          0          0          0           0
+Fetch        2      0.04       0.68        330        380          0           1
+------- ------  -------- ---------- ---------- ---------- ----------  ----------
+total        4      0.04       0.76        330        380          0           1
+
+Misses in library cache during parse: 1
+Optimizer mode: ALL_ROWS
+Parsing user id: 91  (CI5313)
+
+Rows     Row Source Operation
+-------  ---------------------------------------------------
+      1  SORT ORDER BY (cr=380 pr=330 pw=0 time=0 us cost=167 size=46 card=1)
+      1   HASH GROUP BY (cr=380 pr=330 pw=0 time=0 us cost=167 size=46 card=1)
+    202    VIEW  VM_NWVW_1 (cr=380 pr=330 pw=0 time=1809 us cost=165 size=7452 card=162)
+    202     HASH GROUP BY (cr=380 pr=330 pw=0 time=703 us cost=165 size=18630 card=162)
+    204      HASH JOIN ANTI (cr=380 pr=330 pw=0 time=812 us cost=164 size=18630 card=162)
+    204       NESTED LOOPS  (cr=170 pr=122 pw=0 time=569009 us cost=106 size=8037 card=171)
+     51        TABLE ACCESS BY INDEX ROWID PART (cr=64 pr=62 pw=0 time=290300 us cost=20 size=1634 card=43)
+     51         BITMAP CONVERSION TO ROWIDS (cr=14 pr=12 pw=0 time=200 us)
+      1          BITMAP AND  (cr=14 pr=12 pw=0 time=0 us)
+      4           BITMAP INDEX SINGLE VALUE P_BRAND_IDX (cr=5 pr=3 pw=0 time=42 us)(object id 75509)
+      1           BITMAP CONVERSION FROM ROWIDS (cr=9 pr=9 pw=0 time=0 us)
+   1266            INDEX RANGE SCAN P_TYPE_IDXB_ (cr=9 pr=9 pw=0 time=5819 us cost=8 size=0 card=1157)(object id 75471)
+    204        INDEX RANGE SCAN PK_PARTSUPPLIER (cr=106 pr=60 pw=0 time=411 us cost=2 size=36 card=4)(object id 75356)
+      1       TABLE ACCESS FULL SUPPLIER (cr=210 pr=208 pw=0 time=0 us cost=58 size=34000 card=500)
+
+
+Rows     Execution Plan
+-------  ---------------------------------------------------
+      0  SELECT STATEMENT   MODE: ALL_ROWS
+      1   SORT (ORDER BY)
+      1    HASH (GROUP BY)
+    202     VIEW OF 'VM_NWVW_1' (VIEW)
+    202      HASH (GROUP BY)
+    204       HASH JOIN (ANTI)
+    204        NESTED LOOPS
+     51         TABLE ACCESS   MODE: ANALYZED (BY INDEX ROWID) OF 
+                    'PART' (TABLE)
+     51          INDEX   MODE: ANALYZED (RANGE SCAN) OF 
+                     'P_COMPUESTOB' (INDEX)
+      1         INDEX   MODE: ANALYZED (RANGE SCAN) OF 
+                    'PK_PARTSUPPLIER' (INDEX (UNIQUE))
+      4        TABLE ACCESS   MODE: ANALYZED (FULL) OF 'SUPPLIER' 
+                   (TABLE)
+
+********************************************************************************
+
+select PS_SUPPKEY, S_NAME, S_NATIONKEY, S_PHONE, PS_SUPPCOST
+from CI5313.PARTSUPPLIER E, CI5313.SUPPLIER, CI5313.NATION, CI5313.REGION, CI5313.PART
+where PS_PARTKEY=P_PARTKEY and
+P_SIZE = 6 and
+P_TYPE like '%f' and
+R_NAME='f' and
+PS_SUPPKEY = S_SUPPKEY and
+S_NATIONKEY = N_NATIONKEY and
+N_REGIONKEY=R_REGIONKEY and
+PS_SUPPCOST=
+(SELECT min( PS_SUPPCOST)
+from CI5313.PARTSUPPLIER I
+where E.PS_PARTKEY=I.PS_PARTKEY)
+
+call     count       cpu    elapsed       disk      query    current        rows
+------- ------  -------- ---------- ---------- ---------- ----------  ----------
+Parse        1      0.07       0.07          0          0          0           0
+Execute      1      0.00       0.00          0          0          0           0
+Fetch        1      0.00       0.00          4          6          0           0
+------- ------  -------- ---------- ---------- ---------- ----------  ----------
+total        3      0.07       0.07          4          6          0           0
+
+Misses in library cache during parse: 1
+Optimizer mode: ALL_ROWS
+Parsing user id: 91  (CI5313)
+
+Rows     Row Source Operation
+-------  ---------------------------------------------------
+      0  FILTER  (cr=6 pr=4 pw=0 time=0 us)
+      0   HASH JOIN  (cr=6 pr=4 pw=0 time=0 us cost=882 size=8832 card=69)
+     25    TABLE ACCESS FULL NATION (cr=3 pr=2 pw=0 time=96 us cost=2 size=150 card=25)
+      0    HASH JOIN  (cr=3 pr=2 pw=0 time=0 us cost=880 size=42334 card=347)
+      0     NESTED LOOPS  (cr=3 pr=2 pw=0 time=0 us)
+      0      NESTED LOOPS  (cr=3 pr=2 pw=0 time=0 us cost=821 size=25331 card=347)
+      0       MERGE JOIN CARTESIAN (cr=3 pr=2 pw=0 time=0 us cost=557 size=5192 card=88)
+      0        TABLE ACCESS FULL REGION (cr=3 pr=2 pw=0 time=0 us cost=2 size=29 card=1)
+      0        BUFFER SORT (cr=0 pr=0 pw=0 time=0 us cost=555 size=5250 card=175)
+      0         TABLE ACCESS BY INDEX ROWID PART (cr=0 pr=0 pw=0 time=0 us cost=557 size=5250 card=175)
+      0          BITMAP CONVERSION TO ROWIDS (cr=0 pr=0 pw=0 time=0 us)
+      0           BITMAP INDEX SINGLE VALUE P_SIZE_IDX (cr=0 pr=0 pw=0 time=0 us)(object id 75508)
+      0       INDEX RANGE SCAN PK_PARTSUPPLIER (cr=0 pr=0 pw=0 time=0 us cost=2 size=0 card=4)(object id 75356)
+      0      TABLE ACCESS BY INDEX ROWID PARTSUPPLIER (cr=0 pr=0 pw=0 time=0 us cost=3 size=56 card=4)
+      0     TABLE ACCESS FULL SUPPLIER (cr=0 pr=0 pw=0 time=0 us cost=58 size=490000 card=10000)
+      0   SORT AGGREGATE (cr=0 pr=0 pw=0 time=0 us)
+      0    TABLE ACCESS BY INDEX ROWID PARTSUPPLIER (cr=0 pr=0 pw=0 time=0 us cost=4 size=40 card=4)
+      0     INDEX RANGE SCAN PK_PARTSUPPLIER (cr=0 pr=0 pw=0 time=0 us cost=3 size=0 card=4)(object id 75356)
+
+
+Rows     Execution Plan
+-------  ---------------------------------------------------
+      0  SELECT STATEMENT   MODE: ALL_ROWS
+      0   FILTER
+      0    HASH JOIN
+     25     TABLE ACCESS   MODE: ANALYZED (FULL) OF 'NATION' (TABLE)
+      0     HASH JOIN
+      0      NESTED LOOPS
+      0       NESTED LOOPS
+      0        MERGE JOIN (CARTESIAN)
+      0         TABLE ACCESS   MODE: ANALYZED (FULL) OF 'REGION' 
+                    (TABLE)
+      0         BUFFER (SORT)
+      0          TABLE ACCESS   MODE: ANALYZED (FULL) OF 'PART' 
+                     (TABLE)
+      0        INDEX   MODE: ANALYZED (RANGE SCAN) OF 
+                   'PK_PARTSUPPLIER' (INDEX (UNIQUE))
+      0       TABLE ACCESS   MODE: ANALYZED (BY INDEX ROWID) OF 
+                  'PARTSUPPLIER' (TABLE)
+      0      TABLE ACCESS   MODE: ANALYZED (FULL) OF 'SUPPLIER' (TABLE)
+
+      0    SORT (AGGREGATE)
+      0     TABLE ACCESS   MODE: ANALYZED (BY INDEX ROWID) OF 
+                'PARTSUPPLIER' (TABLE)
+      0      INDEX   MODE: ANALYZED (RANGE SCAN) OF 'PK_PARTSUPPLIER' 
+                 (INDEX (UNIQUE))
+
+********************************************************************************
+
+select P_BRAND, P_TYPE, count(distinct PS_SUPPKEY) as SUPPLIER_CNT
+from CI5313.PARTSUPPLIER, CI5313.PART
+where P_PARTKEY = PS_PARTKEY and
+P_BRAND = 'Brand#51' and
+P_TYPE like 'STANDARD PLATED COPPER' and
+PS_SUPPKEY not in (select S_SUPPKEY from CI5313.SUPPLIER
+where S_COMMENT like '%Customer%Complaints')
+group by
+P_BRAND, P_TYPE
+order by
+SUPPLIER_CNT desc, P_BRAND, P_TYPE
+
+call     count       cpu    elapsed       disk      query    current        rows
+------- ------  -------- ---------- ---------- ---------- ----------  ----------
+Parse        1      0.00       0.00          0          0          0           0
+Execute      1      0.00       0.00          0          0          0           0
+Fetch        2      0.02       0.18        116        390          0           1
+------- ------  -------- ---------- ---------- ---------- ----------  ----------
+total        4      0.03       0.19        116        390          0           1
+
+Misses in library cache during parse: 1
+Optimizer mode: ALL_ROWS
+Parsing user id: 91  (CI5313)
+
+Rows     Row Source Operation
+-------  ---------------------------------------------------
+      1  SORT ORDER BY (cr=390 pr=116 pw=0 time=0 us cost=176 size=46 card=1)
+      1   HASH GROUP BY (cr=390 pr=116 pw=0 time=0 us cost=176 size=46 card=1)
+    213    VIEW  VM_NWVW_1 (cr=390 pr=116 pw=0 time=4452 us cost=174 size=8188 card=178)
+    213     HASH GROUP BY (cr=390 pr=116 pw=0 time=848 us cost=174 size=20470 card=178)
+    216      HASH JOIN ANTI (cr=390 pr=116 pw=0 time=967 us cost=173 size=20470 card=178)
+    216       NESTED LOOPS  (cr=180 pr=116 pw=0 time=15802 us cost=115 size=8836 card=188)
+     54        TABLE ACCESS BY INDEX ROWID PART (cr=68 pr=61 pw=0 time=40386 us cost=21 size=1786 card=47)
+     54         BITMAP CONVERSION TO ROWIDS (cr=14 pr=8 pw=0 time=265 us)
+      1          BITMAP AND  (cr=14 pr=8 pw=0 time=0 us)
+      4           BITMAP INDEX SINGLE VALUE P_BRAND_IDX (cr=5 pr=0 pw=0 time=27 us)(object id 75509)
+      1           BITMAP CONVERSION FROM ROWIDS (cr=9 pr=8 pw=0 time=0 us)
+   1354            INDEX RANGE SCAN P_TYPE_IDXB_ (cr=9 pr=8 pw=0 time=3690 us cost=8 size=0 card=0)(object id 75471)
+    216        INDEX RANGE SCAN PK_PARTSUPPLIER (cr=112 pr=55 pw=0 time=444 us cost=2 size=36 card=4)(object id 75356)
+      1       TABLE ACCESS FULL SUPPLIER (cr=210 pr=0 pw=0 time=0 us cost=58 size=34000 card=500)
+
+
+Rows     Execution Plan
+-------  ---------------------------------------------------
+      0  SELECT STATEMENT   MODE: ALL_ROWS
+      1   SORT (ORDER BY)
+      1    HASH (GROUP BY)
+    213     VIEW OF 'VM_NWVW_1' (VIEW)
+    213      HASH (GROUP BY)
+    216       HASH JOIN (ANTI)
+    216        NESTED LOOPS
+     54         TABLE ACCESS   MODE: ANALYZED (BY INDEX ROWID) OF 
+                    'PART' (TABLE)
+     54          INDEX   MODE: ANALYZED (RANGE SCAN) OF 
+                     'P_COMPUESTOB' (INDEX)
+      1         INDEX   MODE: ANALYZED (RANGE SCAN) OF 
+                    'PK_PARTSUPPLIER' (INDEX (UNIQUE))
+      4        TABLE ACCESS   MODE: ANALYZED (FULL) OF 'SUPPLIER' 
+                   (TABLE)
+
+********************************************************************************
+
+select PS_SUPPKEY, S_NAME, S_NATIONKEY, S_PHONE, PS_SUPPCOST
+from CI5313.PARTSUPPLIER E, CI5313.SUPPLIER, CI5313.NATION, CI5313.REGION, CI5313.PART
+where PS_PARTKEY=P_PARTKEY and
+P_SIZE = 6 and
+P_TYPE like '%PROMO PLATED STEEL' and
+R_NAME='ASIA' and
+PS_SUPPKEY = S_SUPPKEY and
+S_NATIONKEY = N_NATIONKEY and
+N_REGIONKEY=R_REGIONKEY and
+PS_SUPPCOST=
+(SELECT min( PS_SUPPCOST)
+from CI5313.PARTSUPPLIER I
+where E.PS_PARTKEY=I.PS_PARTKEY)
+
+call     count       cpu    elapsed       disk      query    current        rows
+------- ------  -------- ---------- ---------- ---------- ----------  ----------
+Parse        1      0.07       0.07          0          0          0           0
+Execute      1      0.00       0.00          0          0          0           0
+Fetch        2      0.19       0.53       2464       2857          0           8
+------- ------  -------- ---------- ---------- ---------- ----------  ----------
+total        4      0.26       0.61       2464       2857          0           8
+
+Misses in library cache during parse: 1
+Optimizer mode: ALL_ROWS
+Parsing user id: 91  (CI5313)
+
+Rows     Row Source Operation
+-------  ---------------------------------------------------
+      8  FILTER  (cr=2857 pr=2464 pw=0 time=0 us)
+     35   HASH JOIN  (cr=2786 pr=2464 pw=0 time=16014 us cost=1142 size=17792 card=139)
+      1    TABLE ACCESS FULL REGION (cr=3 pr=0 pw=0 time=0 us cost=2 size=29 card=1)
+    124    HASH JOIN  (cr=2783 pr=2464 pw=0 time=1968 us cost=1139 size=68805 card=695)
+     25     TABLE ACCESS FULL NATION (cr=3 pr=0 pw=0 time=72 us cost=2 size=150 card=25)
+    124     HASH JOIN  (cr=2780 pr=2464 pw=0 time=615 us cost=1137 size=64635 card=695)
+    124      NESTED LOOPS  (cr=2569 pr=2464 pw=0 time=4797 us)
+    124       NESTED LOOPS  (cr=2538 pr=2433 pw=0 time=1476 us cost=1078 size=30580 card=695)
+     31        TABLE ACCESS BY INDEX ROWID PART (cr=2474 pr=2406 pw=0 time=217440 us cost=553 size=5250 card=175)
+   3964         BITMAP CONVERSION TO ROWIDS (cr=3 pr=2 pw=0 time=11377 us)
+      2          BITMAP INDEX SINGLE VALUE P_SIZE_IDX (cr=3 pr=2 pw=0 time=20 us)(object id 75508)
+    124        INDEX RANGE SCAN PK_PARTSUPPLIER (cr=64 pr=27 pw=0 time=324 us cost=2 size=0 card=4)(object id 75356)
+    124       TABLE ACCESS BY INDEX ROWID PARTSUPPLIER (cr=31 pr=31 pw=0 time=0 us cost=3 size=56 card=4)
+  10000      TABLE ACCESS FULL SUPPLIER (cr=211 pr=0 pw=0 time=27339 us cost=58 size=490000 card=10000)
+     23   SORT AGGREGATE (cr=71 pr=0 pw=0 time=0 us)
+     92    TABLE ACCESS BY INDEX ROWID PARTSUPPLIER (cr=71 pr=0 pw=0 time=576 us cost=4 size=40 card=4)
+     92     INDEX RANGE SCAN PK_PARTSUPPLIER (cr=48 pr=0 pw=0 time=186 us cost=3 size=0 card=4)(object id 75356)
+
+
+Rows     Execution Plan
+-------  ---------------------------------------------------
+      0  SELECT STATEMENT   MODE: ALL_ROWS
+      8   FILTER
+     35    HASH JOIN
+      1     TABLE ACCESS   MODE: ANALYZED (FULL) OF 'NATION' (TABLE)
+    124     HASH JOIN
+     25      NESTED LOOPS
+    124       NESTED LOOPS
+    124        MERGE JOIN (CARTESIAN)
+    124         TABLE ACCESS   MODE: ANALYZED (FULL) OF 'REGION' 
+                    (TABLE)
+     31         BUFFER (SORT)
+   3964          TABLE ACCESS   MODE: ANALYZED (FULL) OF 'PART' 
+                     (TABLE)
+      2        INDEX   MODE: ANALYZED (RANGE SCAN) OF 
+                   'PK_PARTSUPPLIER' (INDEX (UNIQUE))
+    124       TABLE ACCESS   MODE: ANALYZED (BY INDEX ROWID) OF 
+                  'PARTSUPPLIER' (TABLE)
+    124      TABLE ACCESS   MODE: ANALYZED (FULL) OF 'SUPPLIER' (TABLE)
+
+  10000    SORT (AGGREGATE)
+     23     TABLE ACCESS   MODE: ANALYZED (BY INDEX ROWID) OF 
+                'PARTSUPPLIER' (TABLE)
+     92      INDEX   MODE: ANALYZED (RANGE SCAN) OF 'PK_PARTSUPPLIER' 
+                 (INDEX (UNIQUE))
+
+********************************************************************************
+
+select P_BRAND, P_TYPE, count(distinct PS_SUPPKEY) as SUPPLIER_CNT
+from CI5313.PARTSUPPLIER, CI5313.PART
+where P_PARTKEY = PS_PARTKEY and
+P_BRAND = 'Brand#51' and
+P_TYPE like 'PROMO PLATED STEEL' and
+PS_SUPPKEY not in (select S_SUPPKEY from CI5313.SUPPLIER
+where S_COMMENT like '%Customer%Complaints')
+group by
+P_BRAND, P_TYPE
+order by
+SUPPLIER_CNT desc, P_BRAND, P_TYPE
+
+call     count       cpu    elapsed       disk      query    current        rows
+------- ------  -------- ---------- ---------- ---------- ----------  ----------
+Parse        1      0.00       0.03          0          0          0           0
+Execute      1      0.00       0.01          0          0          0           0
+Fetch        2      0.02       0.25        102        369          0           1
+------- ------  -------- ---------- ---------- ---------- ----------  ----------
+total        4      0.03       0.30        102        369          0           1
+
+Misses in library cache during parse: 1
+Optimizer mode: ALL_ROWS
+Parsing user id: 91  (CI5313)
+
+Rows     Row Source Operation
+-------  ---------------------------------------------------
+      1  SORT ORDER BY (cr=369 pr=102 pw=0 time=0 us cost=194 size=46 card=1)
+      1   HASH GROUP BY (cr=369 pr=102 pw=0 time=0 us cost=194 size=46 card=1)
+    202    VIEW  VM_NWVW_1 (cr=369 pr=102 pw=0 time=1809 us cost=192 size=7452 card=162)
+    202     HASH GROUP BY (cr=369 pr=102 pw=0 time=804 us cost=192 size=18630 card=162)
+    204      HASH JOIN ANTI (cr=369 pr=102 pw=0 time=913 us cost=191 size=18630 card=162)
+    204       NESTED LOOPS  (cr=159 pr=102 pw=0 time=569922 us cost=132 size=8037 card=171)
+     51        TABLE ACCESS BY INDEX ROWID PART (cr=53 pr=53 pw=0 time=100850 us cost=46 size=1634 card=43)
+     51         INDEX RANGE SCAN P_COMPUESTOB (cr=3 pr=3 pw=0 time=0 us cost=3 size=0 card=43)(object id 75521)
+    204        INDEX RANGE SCAN PK_PARTSUPPLIER (cr=106 pr=49 pw=0 time=489 us cost=2 size=36 card=4)(object id 75356)
+      1       TABLE ACCESS FULL SUPPLIER (cr=210 pr=0 pw=0 time=0 us cost=58 size=34000 card=500)
+
+
+Rows     Execution Plan
+-------  ---------------------------------------------------
+      0  SELECT STATEMENT   MODE: ALL_ROWS
+      1   SORT (ORDER BY)
+      1    HASH (GROUP BY)
+    202     VIEW OF 'VM_NWVW_1' (VIEW)
+    202      HASH (GROUP BY)
+    204       HASH JOIN (ANTI)
+    204        NESTED LOOPS
+     51         TABLE ACCESS   MODE: ANALYZED (BY INDEX ROWID) OF 
+                    'PART' (TABLE)
+     51          INDEX   MODE: ANALYZED (RANGE SCAN) OF 
+                     'P_COMPUESTOB' (INDEX)
+    204         INDEX   MODE: ANALYZED (RANGE SCAN) OF 
+                    'PK_PARTSUPPLIER' (INDEX (UNIQUE))
+      1        TABLE ACCESS   MODE: ANALYZED (FULL) OF 'SUPPLIER' 
+                   (TABLE)
+
+********************************************************************************
+
+select PS_SUPPKEY, S_NAME, S_NATIONKEY, S_PHONE, PS_SUPPCOST
+from CI5313.PARTSUPPLIER E, CI5313.SUPPLIER, CI5313.NATION, CI5313.REGION, CI5313.PART
+where PS_PARTKEY=P_PARTKEY and
+P_SIZE = 6 and
+P_TYPE like '%tonta' and
+R_NAME='f' and
+PS_SUPPKEY = S_SUPPKEY and
+S_NATIONKEY = N_NATIONKEY and
+N_REGIONKEY=R_REGIONKEY and
+PS_SUPPCOST=
+(SELECT min( PS_SUPPCOST)
+from CI5313.PARTSUPPLIER I
+where E.PS_PARTKEY=I.PS_PARTKEY)
+
+call     count       cpu    elapsed       disk      query    current        rows
+------- ------  -------- ---------- ---------- ---------- ----------  ----------
+Parse        1      0.07       0.07          0          0          0           0
+Execute      1      0.00       0.00          0          0          0           0
+Fetch        1      0.00       0.00          0          6          0           0
+------- ------  -------- ---------- ---------- ---------- ----------  ----------
+total        3      0.07       0.07          0          6          0           0
+
+Misses in library cache during parse: 1
+Optimizer mode: ALL_ROWS
+Parsing user id: 91  (CI5313)
+
+Rows     Row Source Operation
+-------  ---------------------------------------------------
+      0  FILTER  (cr=6 pr=0 pw=0 time=0 us)
+      0   HASH JOIN  (cr=6 pr=0 pw=0 time=0 us cost=1356 size=8832 card=69)
+     25    TABLE ACCESS FULL NATION (cr=3 pr=0 pw=0 time=72 us cost=2 size=150 card=25)
+      0    HASH JOIN  (cr=3 pr=0 pw=0 time=0 us cost=1353 size=42334 card=347)
+      0     NESTED LOOPS  (cr=3 pr=0 pw=0 time=0 us)
+      0      NESTED LOOPS  (cr=3 pr=0 pw=0 time=0 us cost=1295 size=25331 card=347)
+      0       MERGE JOIN CARTESIAN (cr=3 pr=0 pw=0 time=0 us cost=1031 size=5192 card=88)
+      0        TABLE ACCESS FULL REGION (cr=3 pr=0 pw=0 time=0 us cost=2 size=29 card=1)
+      0        BUFFER SORT (cr=0 pr=0 pw=0 time=0 us cost=1029 size=5250 card=175)
+      0         TABLE ACCESS FULL PART (cr=0 pr=0 pw=0 time=0 us cost=1029 size=5250 card=175)
+      0       INDEX RANGE SCAN PK_PARTSUPPLIER (cr=0 pr=0 pw=0 time=0 us cost=2 size=0 card=4)(object id 75356)
+      0      TABLE ACCESS BY INDEX ROWID PARTSUPPLIER (cr=0 pr=0 pw=0 time=0 us cost=3 size=56 card=4)
+      0     TABLE ACCESS FULL SUPPLIER (cr=0 pr=0 pw=0 time=0 us cost=58 size=490000 card=10000)
+      0   SORT AGGREGATE (cr=0 pr=0 pw=0 time=0 us)
+      0    TABLE ACCESS BY INDEX ROWID PARTSUPPLIER (cr=0 pr=0 pw=0 time=0 us cost=4 size=40 card=4)
+      0     INDEX RANGE SCAN PK_PARTSUPPLIER (cr=0 pr=0 pw=0 time=0 us cost=3 size=0 card=4)(object id 75356)
+
+
+Rows     Execution Plan
+-------  ---------------------------------------------------
+      0  SELECT STATEMENT   MODE: ALL_ROWS
+      0   FILTER
+      0    HASH JOIN
+     25     TABLE ACCESS   MODE: ANALYZED (FULL) OF 'NATION' (TABLE)
+      0     HASH JOIN
+      0      NESTED LOOPS
+      0       NESTED LOOPS
+      0        MERGE JOIN (CARTESIAN)
+      0         TABLE ACCESS   MODE: ANALYZED (FULL) OF 'REGION' 
+                    (TABLE)
+      0         BUFFER (SORT)
+      0          TABLE ACCESS   MODE: ANALYZED (FULL) OF 'PART' 
+                     (TABLE)
+      0        INDEX   MODE: ANALYZED (RANGE SCAN) OF 
+                   'PK_PARTSUPPLIER' (INDEX (UNIQUE))
+      0       TABLE ACCESS   MODE: ANALYZED (BY INDEX ROWID) OF 
+                  'PARTSUPPLIER' (TABLE)
+      0      TABLE ACCESS   MODE: ANALYZED (FULL) OF 'SUPPLIER' (TABLE)
+
+      0    SORT (AGGREGATE)
+      0     TABLE ACCESS   MODE: ANALYZED (BY INDEX ROWID) OF 
+                'PARTSUPPLIER' (TABLE)
+      0      INDEX   MODE: ANALYZED (RANGE SCAN) OF 'PK_PARTSUPPLIER' 
+                 (INDEX (UNIQUE))
+
+********************************************************************************
+
+select P_BRAND, P_TYPE, count(distinct PS_SUPPKEY) as SUPPLIER_CNT
+from CI5313.PARTSUPPLIER, CI5313.PART
+where P_PARTKEY = PS_PARTKEY and
+P_BRAND = 'Brand#51' and
+P_TYPE like 'STANDARD PLATED COPPER' and
+PS_SUPPKEY not in (select S_SUPPKEY from CI5313.SUPPLIER
+where S_COMMENT like '%Customer%Complaints')
+group by
+P_BRAND, P_TYPE
+order by
+SUPPLIER_CNT desc, P_BRAND, P_TYPE
+
+call     count       cpu    elapsed       disk      query    current        rows
+------- ------  -------- ---------- ---------- ---------- ----------  ----------
+Parse        1      0.00       0.00          0          0          0           0
+Execute      1      0.00       0.00          0          0          0           0
+Fetch        2      0.03       0.03        330        380          0           1
+------- ------  -------- ---------- ---------- ---------- ----------  ----------
+total        4      0.03       0.04        330        380          0           1
+
+Misses in library cache during parse: 1
+Optimizer mode: ALL_ROWS
+Parsing user id: 91  (CI5313)
+
+Rows     Row Source Operation
+-------  ---------------------------------------------------
+      1  SORT ORDER BY (cr=380 pr=330 pw=0 time=0 us cost=207 size=46 card=1)
+      1   HASH GROUP BY (cr=380 pr=330 pw=0 time=0 us cost=207 size=46 card=1)
+    213    VIEW  VM_NWVW_1 (cr=380 pr=330 pw=0 time=2014 us cost=205 size=8188 card=178)
+    213     HASH GROUP BY (cr=380 pr=330 pw=0 time=848 us cost=205 size=20470 card=178)
+    216      HASH JOIN ANTI (cr=380 pr=330 pw=0 time=860 us cost=204 size=20470 card=178)
+    216       NESTED LOOPS  (cr=170 pr=122 pw=0 time=10212 us cost=145 size=8836 card=188)
+     54        TABLE ACCESS BY INDEX ROWID PART (cr=58 pr=58 pw=0 time=115487 us cost=51 size=1786 card=47)
+     54         INDEX RANGE SCAN P_COMPUESTOB (cr=4 pr=4 pw=0 time=0 us cost=3 size=0 card=47)(object id 75521)
+    216        INDEX RANGE SCAN PK_PARTSUPPLIER (cr=112 pr=64 pw=0 time=441 us cost=2 size=36 card=4)(object id 75356)
+      1       TABLE ACCESS FULL SUPPLIER (cr=210 pr=208 pw=0 time=0 us cost=58 size=34000 card=500)
+
+
+Rows     Execution Plan
+-------  ---------------------------------------------------
+      0  SELECT STATEMENT   MODE: ALL_ROWS
+      1   SORT (ORDER BY)
+      1    HASH (GROUP BY)
+    213     VIEW OF 'VM_NWVW_1' (VIEW)
+    213      HASH (GROUP BY)
+    216       HASH JOIN (ANTI)
+    216        NESTED LOOPS
+     54         TABLE ACCESS   MODE: ANALYZED (BY INDEX ROWID) OF 
+                    'PART' (TABLE)
+     54          INDEX   MODE: ANALYZED (RANGE SCAN) OF 
+                     'P_COMPUESTOB' (INDEX)
+    216         INDEX   MODE: ANALYZED (RANGE SCAN) OF 
+                    'PK_PARTSUPPLIER' (INDEX (UNIQUE))
+      1        TABLE ACCESS   MODE: ANALYZED (FULL) OF 'SUPPLIER' 
+                   (TABLE)
+
+
+
+
+********************************************************************************
+
+OVERALL TOTALS FOR ALL NON-RECURSIVE STATEMENTS
+
+call     count       cpu    elapsed       disk      query    current        rows
+------- ------  -------- ---------- ---------- ---------- ----------  ----------
+Parse       20      0.40       0.51          0          0          0           0
+Execute     30      0.00       0.05          0          0          0           0
+Fetch       18      0.50       1.88      11016      13134          0          29
+------- ------  -------- ---------- ---------- ---------- ----------  ----------
+total       68      0.91       2.44      11016      13134          0          29
+
+Misses in library cache during parse: 20
+Misses in library cache during execute: 10
+
+
+OVERALL TOTALS FOR ALL RECURSIVE STATEMENTS
+
+call     count       cpu    elapsed       disk      query    current        rows
+------- ------  -------- ---------- ---------- ---------- ----------  ----------
+Parse        0      0.00       0.00          0          0          0           0
+Execute      0      0.00       0.00          0          0          0           0
+Fetch        0      0.00       0.00          0          0          0           0
+------- ------  -------- ---------- ---------- ---------- ----------  ----------
+total        0      0.00       0.00          0          0          0           0
+
+Misses in library cache during parse: 0
+
+   30  user  SQL statements in session.
+    0  internal SQL statements in session.
+   30  SQL statements in session.
+    9  statements EXPLAINed in this session.
+********************************************************************************
+Trace file: rosetta_ora_31874.trc
+Trace file compatibility: 11.1.0.7
+Sort options: default
+
+       1  session in tracefile.
+      30  user  SQL statements in trace file.
+       0  internal SQL statements in trace file.
+      30  SQL statements in trace file.
+       7  unique SQL statements in trace file.
+       9  SQL statements EXPLAINed using schema:
+           CI5313.prof$plan_table
+             Default table was used.
+             Table was created.
+             Table was dropped.
+     528  lines in trace file.
+    1055  elapsed seconds in trace file.
+
+
