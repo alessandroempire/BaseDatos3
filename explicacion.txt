@@ -1,0 +1,40 @@
+sobre la consulta Q3:
+
+al analizar las estadisticas de lecturas a disco de las consultas sin indices, esto lo podemos apreciar en el archivo straceSpool.sql, conjunto con el plan de ejecucion de esta, y se encuentra en el archivo planEjecucionSpool.sql. 
+
+Sobre todo al analizar el plan de ejecucion observamos que realizar varios full scan sobre las tablas por tanto tendremos un alto (4910 physical reads)
+
+Vamos a crear vario grupo de indices para ver si logramos optimizar esta consulta:
+
+1) Creamos indices BITMAP sobre los atributos p_type p_size y p_brand de la tablapart. Esto porque en etapa pasada observamos que estos atributos tienen poca valores diferentes y asi son eficientes en espacio. 
+Observamos que el numero de physical read se disminuyo a 332! Y observando el plan de ejecucion vemos como utiliza los bitmap y las operaciones AND para realizar busquedas.
+
+2) En la segunda propuesta creamos indices arboles B+ sobre los mismo atributos. 
+Observamos que en el plan de ejecucion el optimizador usa el indice para los atributos de la tabla PART, pero luego emplea un BITMAP para culminar la consulta. Si obervamos las estadisticas, vemos que tiene un poco de mas physical reads: 362, y aunque el numero no aumenta mucho hay que tener en cuenta que se estan usando estructuras que no agregan eficiencia sino mas bien lo hacen mas lento. 
+
+3) En este creamos un indice arbol B+ compuesto sobre los atributos de la tabla part. Fueron dos indices compuesto: (p_type, p_size) y (p_type, p_brand)
+Cuando analizamos el plan de ejecucion, vemos que no emplea el uso de BITMAPS sino que aprovecha el indice compuesto para poder filtrar su busqueda de esos atributos en particular. 
+
+
+
+Cabe destacar, en los tres casos explicamos fueron los indices creados sobre los atributos de la PART ya que son los que tienen mayor peso en la consulta. Hacemos notar que tambien hay otros accesos como a la tabla SUPPLIER en donde no creamos un indice por el tamano de los datos de la tabla
+
+
+
+
+
+En la consulta Q5
+
+Nos vamos a enforcar primordialmente en los atributos de la tabla PART que se emplean en la consulta. 
+Los otros componentes de la consulta ya tienen indices creados por el mismo manejador de base de datos, o simplemente su tabla como nation y region son tan diminutas que no es necesario un indice. 
+
+Primero veamos el rendimineto de la consulta sin indices: donde hubo un total de 23846 de physical reads. Podemos apreciar que tiene un alto numero de accesos a discos y vamos a proponer 3 indices como en la consulta Q3.
+
+1) Indices BITMAP sobre p_type p_size y p_brand
+El hecho que estos atributos tengas un numero bajo de valores diferentes nos permiten crear estas tabla de BITMAP lo cual el manejador usa para luego hacerle un JOIN y aprovechar al maximo. Es tanta la eficiencia que se redujo a 724 physical reads. 
+
+2) Indices B+ sobre p_type P_size y p_brand
+Si analizamos el plan de ejecucion, veremos de nuevo que el optimizador escoge no usar estos indices. Por tanto se reduce a un total de 4063 physical reads usando otros indices sobre otras tablas como partsupplier con el atributo ps_suppcost
+
+3) Indices B+ compuesto:  (p_type, p_size) y (p_type, p_brand)
+Al analizar el plan de ejecucion nos fijamos que el manejador no usas estos indices para realizar las consultas sobre la tabla PART. Esta decision segura debe ser que el manejador se percato que al usar este indice esta incurriendo en un overhead ya que realiza busquedas por separada lo cual no lo hacen eficiente con un indice compuesto. Por eso vemos que su physical read se redujo a 4063 apenas.

@@ -1,15 +1,21 @@
-define FILE=straceSpool.sql
+define FILE=straceH35Spool.sql
 spool &FILE
+set lines 90
+set trimout on
+set space 1 
+set tab off
 
 --Consultas Proyecto Fase I - Tipo A (CI5313):
 
 --------------------------------------------------------------------------------------------------
+/*
 --Q1: Valor de los productos enviados de un país a otro 
 --value for nation1: IRAN Y PERU
 ALTER SESSION SET EVENTS= 'immediate trace name flush_cache';
-set autotrace on statistics;
+set autotrace ON statistics;
 
-select count(*) from (
+select count(*)
+from (
 select supp_nation, cust_nation, l_year, sum(volume) as revenue
 from (select
 n1.n_name as supp_nation,
@@ -34,6 +40,7 @@ l_year);
 
 set autotrace off;
 --------------------------------------------------------------------------------------------------
+/*
 --Q2: Prioridad de envío 
 ALTER SESSION SET EVENTS= 'immediate trace name flush_cache';
 set autotrace on statistics;
@@ -54,6 +61,7 @@ order by
 REVENUE desc, O_ORDERDATE);
 
 set autotrace off; 
+*/
 --------------------------------------------------------------------------------------------------
 --Q3: Relación entre libros y fabricantes 
 ALTER SESSION SET EVENTS= 'immediate trace name flush_cache';
@@ -74,6 +82,7 @@ SUPPLIER_CNT desc, P_BRAND, P_TYPE);
 
 set autotrace off;
 --------------------------------------------------------------------------------------------------
+/*
 --Q4: Distribución de clientes 
 ALTER SESSION SET EVENTS= 'immediate trace name flush_cache';
 set autotrace on statistics;
@@ -91,14 +100,16 @@ order by
 CUSTDIST desc, C_COUNT desc);
 
 set autotrace off; 
-
+*/
 --------------------------------------------------------------------------------------------------
 --Q5: Proveedor con el menor precio 
 ALTER SESSION SET EVENTS= 'immediate trace name flush_cache';
 set autotrace on statistics;
 
 select count(*) from (
-select PS_SUPPKEY, S_NAME, S_NATIONKEY, S_PHONE, PS_SUPPCOST
+select 
+/*+ INDEX (PART p_type_idxb p_size_idxb p_brand_idxb)*/
+PS_SUPPKEY, S_NAME, S_NATIONKEY, S_PHONE, PS_SUPPCOST
 from CI5313.PARTSUPPLIER E, CI5313.SUPPLIER, CI5313.NATION, CI5313.REGION, CI5313.PART
 where PS_PARTKEY=P_PARTKEY and
 P_SIZE = &psize and
@@ -113,6 +124,7 @@ from CI5313.PARTSUPPLIER I
 where E.PS_PARTKEY=I.PS_PARTKEY));
 
 set autotrace off;
+
 ---------------------------------------------------------------------
 spool off;
 

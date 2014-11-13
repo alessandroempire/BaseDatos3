@@ -7,16 +7,16 @@ set tab off
 
 -- Indices sobre tabla PART
 -- Los indices bitmap simples
---create bitmap index p_type_idx on part(p_type);
---create bitmap index p_size_idx on part(p_size);
---create bitmap index p_brand_idx on part(p_brand); 
+create bitmap index p_type_idx on part(p_type);
+create bitmap index p_size_idx on part(p_size);
+create bitmap index p_brand_idx on part(p_brand); 
 
 --create index p_type_idxb_ on part(p_type);
 --create index p_size_idxb on part(p_size);
 --create index p_brand_idxb on part(p_brand); 
 
-create index p_compuestoA on part(p_type, p_size);
-create index p_compuestoB on part(p_type, p_brand);
+--create index p_compuestoA on part(p_type, p_size);
+--create index p_compuestoB on part(p_type, p_brand);
 
 -- Indices sobre tabla LINEITEM
 -- Cremaos index B+ sobre l_shipdate
